@@ -1,0 +1,17 @@
+{
+  "name": "note-book",
+  "version": "0.0.0",
+  "description": "个人文档",
+  "main": "index.ts",
+  "repository": "https://gitee.com/huang-qihao123/note-book.git",
+  "author": "INeedAGodDamnGUN <1771032483@qq.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "vitepress": "^1.0.0-alpha.26"
+  },
+  "scripts": {
+    "dev": "vitepress dev docs",
+    "build": "vitepress build docs",
+    "serve": "vitepress serve docs"
+  }
+}
