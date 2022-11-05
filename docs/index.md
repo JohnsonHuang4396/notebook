@@ -6,6 +6,9 @@ titleTemplate: 我的笔记
 
 hero:
     name: 知识点笔记
+    image:
+        src: /imgs/high.png
+        alt: 我的笔记
     actions:
         - theme: brand
           text: 开始JS
@@ -24,6 +27,7 @@ hero:
           link: https://juejin.cn/user/2647279732267342/posts
 
 features:
-    - title: "这是INeedAGodDamnGUN的笔记"
+    - icon: 📓
+      title: "这是INeedAGodDamnGUN的笔记"
       details: 基于VitePress实现的在线MarkDown笔记
 ---
