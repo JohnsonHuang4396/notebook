@@ -1,7 +1,7 @@
-import jsMenuModule from "./jsMenuConfig";
-import VueMenuModule from "./vueMenuConfig";
+import { defineConfig } from "vitepress";
+import sidebar from "./basicMenuConfig";
 
-export default {
+export default defineConfig({
 	title: "my notebook",
 	description: "第一个vitepress",
 	lang: "zh_CN",
@@ -21,12 +21,9 @@ export default {
 			{ text: "JS", link: "/js/", activeMatch: "/js/" },
 			{ text: "Vue", link: "/vue/", activeMatch: "/vue/" },
 		],
-		sidebar: {
-			"/js/": jsMenuModule,
-			"/vue/": VueMenuModule,
-		},
+		sidebar,
 	},
 	markdown: {
 		lineNumbers: true,
 	},
-};
+});

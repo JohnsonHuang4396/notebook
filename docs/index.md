@@ -6,16 +6,15 @@ titleTemplate: 我的笔记
 
 hero:
     name: 知识点笔记
+    actionText: Get Started
+    actionLink: /js/
     image:
         src: /imgs/high.png
         alt: 我的笔记
     actions:
         - theme: brand
-          text: 开始JS
+          text: 开始
           link: /js/
-        - theme: brand
-          text: 开始Vue
-          link: /vue/
         - theme: alt
           text: GitHub
           link: https://github.com/Jhonson1z
@@ -30,4 +29,6 @@ features:
     - icon: 📓
       title: "这是INeedAGodDamnGUN的笔记"
       details: 基于VitePress实现的在线MarkDown笔记
+
+footer: MIT Licensed | Copyright © 2022-present INeedAGodDamnGUN
 ---
