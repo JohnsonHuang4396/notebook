@@ -3,6 +3,7 @@ import sidebar from "./basicMenuConfig";
 
 export default defineConfig({
 	title: "my notebook",
+	base: "/notebook",
 	description: "第一个vitepress",
 	lang: "zh_CN",
 	themeConfig: {
