@@ -1,11 +1,11 @@
 import { DefaultTheme } from 'vitepress'
-import jsMenuModule from './jsMenuConfig'
-import VueMenuModule from './vueMenuConfig'
-import HTMLMenuConfig from './HTMLMenuConfig'
-import mixMenuConfig from './mixMenuConfig'
+import jsMenuModule, { jsNavConfig } from './jsMenuConfig'
+import VueMenuModule, { vueNavConfig } from './vueMenuConfig'
+import HTMLMenuConfig, { htmlNavConfig } from './HTMLMenuConfig'
+import mixMenuConfig, { mixNavConfig } from './mixMenuConfig'
 import myNoteMenuConfig from './myNoteMenuConfig'
 
-const sidebar: DefaultTheme.Sidebar = [
+export const sidebar: DefaultTheme.Sidebar = [
   ...jsMenuModule,
   ...VueMenuModule,
   ...HTMLMenuConfig,
@@ -13,4 +13,13 @@ const sidebar: DefaultTheme.Sidebar = [
   ...myNoteMenuConfig,
 ]
 
-export default sidebar
+export const nav = [
+  {
+    text: 'JS',
+    items: jsNavConfig,
+  },
+  { text: 'Vue', items: vueNavConfig },
+  { text: 'HTML', items: htmlNavConfig },
+  { text: '八股文+面经', items: mixNavConfig },
+  { text: '面试总结', link: '/my-note/' },
+]

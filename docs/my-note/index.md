@@ -1530,6 +1530,10 @@ v-for="user in userList" v-if="shouldShowUserList"
 1. 搭建本地开发服务器
 2. 当浏览器向本地服务器发送请求时，编译请求对应的文件，然后返回
 
+## **Vite 的热更新流程**
+
+[Vite 热更新的主要流程](https://juejin.cn/post/7096103959563075597)
+
 # 微信小程序
 
 ## **微信小程序原理**

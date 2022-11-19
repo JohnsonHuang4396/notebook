@@ -1,13 +1,18 @@
-const htmlBasicLink = "/HTML/md";
+const htmlBasicLink = '/HTML/md'
 
 export default [
-	{
-		text: "HTML",
-		collapsible: true,
-		collapsed: true,
-		items: [
-			{ text: "html好文", link: "/HTML/" },
-			{ text: "html基础", link: `${htmlBasicLink}/htmlBasic` },
-		],
-	},
-];
+  {
+    text: 'HTML',
+    collapsible: true,
+    collapsed: true,
+    items: [
+      { text: 'html好文', link: '/HTML/' },
+      { text: 'html基础', link: `${htmlBasicLink}/htmlBasic` },
+    ],
+  },
+]
+
+export const htmlNavConfig = [
+  { text: 'html好文', link: '/HTML/' },
+  { text: 'html基础', link: `${htmlBasicLink}/htmlBasic` },
+]
