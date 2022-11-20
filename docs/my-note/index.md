@@ -287,9 +287,9 @@
 - `协议缓存`
   > 当`本地缓存过期`或`客户端向服务器请求的资源过期`时，则进行`协议缓存`
   >
-  > `Last-Modified`和`Last-Modified-Since`判断资源在请求期间是否被修改过，如果没有则返回`304`状态码，同时浏览器从缓存取出资源；如果修改过则返回新的`Last-Modified`和新的资源
+  > `Last-Modified-Since`判断资源在请求期间是否被修改过，浏览器在请求时将`Last-Modified-Since`放置于请求头，由服务器对比存储资源的`Last-Modified`和`Last-Modified-Since`是否相同，如果相同则返回`304`状态码，同时浏览器从缓存取出资源；如果修改过则返回新的`Last-Modified`和新的资源
   >
-  > `ETag`和`If-None-Match`判断资源是否被修改过。`ETag`为资源的唯一标识，随服务器资源一起返回，`If-None-Match`为当前浏览器缓存资源的`ETag`，服务器匹配`If-None-Match`是否和当前资源的`ETag`相同，如果相同则返回`304`，不相同则返回新的资源
+  > `ETag`判断资源是否被修改过。`ETag`为资源的唯一标识，浏览器在请求时将资源的`ETag`作为`If-None-Match`发送给服务器，，服务器匹配`If-None-Match`是否和当前资源的`ETag`相同，如果相同则返回`304`，不相同则返回新的资源，新的资源中包含新的`ETag`
 
 ## **三种刷新对 http 缓存的影响**
 
@@ -1478,6 +1478,91 @@ v-for="user in userList" v-if="shouldShowUserList"
 > 2. 然后`Watcher`执行`render函数`生成新的`虚拟DOM`
 >
 > 3. 通过`patch函数`比较`新旧虚拟DOM`得出最小变化后更新视图
+
+## **关于 patch 的 Vue2 和 Vue3 差别**
+
+1. 事件缓存
+
+   > 在`Vue2`中，每个组件的事件都是在调用时才动态生成的，而`Vue3`使用了缓存机制，当组件的事件被缓存时，优先使用缓存事件处理
+   >
+   > ```html
+   > <button @click="handleClick">按钮</button>
+   >
+   > <script>
+   >   export function render(_ctx, _cache, $props, $setup, $data, $options) {
+   >     return (
+   >       _openBlock(),
+   >       _createElementBlock(
+   >         'button',
+   >         {
+   >           onClick:
+   >             _cache[0] ||
+   >             (_cache[0] = (...args) =>
+   >               _ctx.handleClick && _ctx.handleClick(...args)),
+   >         },
+   >         '按钮',
+   >       )
+   >     )
+   >   }
+   > </script>
+   > ```
+
+2. 静态标记
+
+   > `Vue3`中使用静态标记来标注一些**静态节点**，以此表示该节点不需要进行`patch`比较
+   >
+   > ```html
+   > <div id="app">
+   >   <div>沐华</div>
+   >   <p>{{ age }}</p>
+   > </div>
+   >
+   > <script>
+   >   const _hoisted_1 = { id: 'app' }
+   >   const _hoisted_2 = /*#__PURE__*/ _createElementVNode(
+   >     'div',
+   >     null,
+   >     '沐华',
+   >     -1 /* 静态标记 */,
+   >   )
+   >
+   >   export function render(_ctx, _cache, $props, $setup, $data, $options) {
+   >     return (
+   >       _openBlock(),
+   >       _createElementBlock('div', _hoisted_1, [
+   >         _hoisted_2,
+   >         _createElementVNode(
+   >           'p',
+   >           null,
+   >           _toDisplayString(_ctx.age),
+   >           1 /* 表明为静态节点 */,
+   >         ),
+   >       ])
+   >     )
+   >   }
+   > </script>
+   > ```
+
+3. 静态复用
+
+   > `Vue2`在判断节点需要更新时，不会判断元素是否为静态元素，而是进行全量更新。`Vue3`则将静态节点存储起来，在更新中不断复用
+
+4. patchKeyedChildren
+
+   > 在 Vue2 里 updateChildren 会进行
+
+   - 头和头比
+   - 尾和尾比
+   - 头和尾比
+   - 尾和头比
+   - 都没有命中的对比
+     >
+
+   > 在 Vue3 里 patchKeyedChildren 为
+
+   - 头和头比
+   - 尾和尾比
+   - 基于最长递增子序列进行移动/添加/删除
 
 ## **[Vue 的 250 答](https://juejin.cn/post/6844903876231954446#heading-8)**
 
