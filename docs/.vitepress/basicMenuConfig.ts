@@ -3,7 +3,7 @@ import jsMenuModule, { jsNavConfig } from './jsMenuConfig'
 import VueMenuModule, { vueNavConfig } from './vueMenuConfig'
 import HTMLMenuConfig, { htmlNavConfig } from './HTMLMenuConfig'
 import mixMenuConfig, { mixNavConfig } from './mixMenuConfig'
-import myNoteMenuConfig from './myNoteMenuConfig'
+import myNoteMenuConfig, { myNoteNavConfig } from './myNoteMenuConfig'
 
 export const sidebar: DefaultTheme.Sidebar = [
   ...jsMenuModule,
@@ -21,5 +21,5 @@ export const nav = [
   { text: 'Vue', items: vueNavConfig },
   { text: 'HTML', items: htmlNavConfig },
   { text: '八股文+面经', items: mixNavConfig },
-  { text: '面试总结', link: '/my-note/' },
+  { text: '面试总结', items: myNoteNavConfig },
 ]
