@@ -422,9 +422,9 @@ label 标签来定义表单控制间的关系，当用户选择该标签时，�
 - 在混杂模式下，页面以一种比较宽松的向后兼容的方式显示。
 - 混杂模式通常模拟老式浏览器的行为以防止老站点无法工作。
 
-![](/notebook/imgs/standard-box.png)
+![](../imgs/standard-box.png)
 
-![](/notebook/imgs/ie-box.png)
+![](../imgs/ie-box.png)
 
 CSS 盒子模型具有内容 (content)、填充 (padding)、边框 (border)、边界 (margin)这些属性。
 
@@ -948,7 +948,7 @@ transform: rotate(9deg) scale(0.85, 0.9) translate(0px, -30px) skew(-9deg, 0deg)
 
 效果如下：
 
-![](/notebook/imgs/pin-result.png)
+![](../imgs/pin-result.png)
 
 ---
 
@@ -1276,7 +1276,7 @@ p {
 }
 ```
 
-![](/notebook/imgs/left-fix.png)
+![](../imgs/left-fix.png)
 
 2、固定区域浮动，自适应区域不设置宽度但设置 margin
 
@@ -1312,7 +1312,7 @@ p {
 
 但实际上这个方法有个很老火的限制——html 中 sidebar 必须在 main 之前！但我需要 sidebar 在 main 之后！因为我的 main 里面才是网页的主要内容，我不想主要内容反而排在次要内容后面。但如果 sidebar 在 main 之后，那上面的一切都会化为泡影。
 
-![](/notebook/imgs/footer-result.png)
+![](../imgs/footer-result.png)
 
 3、固定区域使用定位，自适应区域不设置宽度，但设置 margin
 
@@ -1333,7 +1333,7 @@ p {
 }
 ```
 
-![](/notebook/imgs/margin-result.png)
+![](../imgs/margin-result.png)
 
 咦，好像不对，footer 怎么还是在那儿呢？怎么没有自动往下走呢？footer 说——我不给绝对主义者让位！其实这与 footer 无关，而是因为 container 对 sidebar 的无视造成的——你再长，我还是没感觉。看来这种定位方式只能满足 sidebar 自己，但对它的兄弟们却毫无益处。
 
@@ -2472,7 +2472,7 @@ xhr.send() // 发起函数
 
 **说说消息队列和事件循环**
 
-![](/notebook/imgs/event-loop.png)
+![](../imgs/event-loop.png)
 
 - 主线程在执行完当前循环中的所有代码后，就会到消息队列取出这条消息(也就是 message 函数)，并执行它。
 - 完成了工作线程对主线程的通知，回调函数也就得到了执行。
@@ -2865,7 +2865,7 @@ console.log(
 
 一、prototype 和 \_**\_proto\_\_** 的区别
 
-![](/notebook/imgs/prototype-diff.png)
+![](../imgs/prototype-diff.png)
 
 ```javascript
 var a = {}
@@ -2879,9 +2879,9 @@ console.log(b.__proto__) //function() {}
 
 结果：
 
-![](/notebook/imgs/prototype-result.png)
+![](../imgs/prototype-result.png)
 
-![](/notebook/imgs/prototype-reason.png)
+![](../imgs/prototype-reason.png)
 
 ```javascript
 /*1、字面量方式*/
@@ -2913,9 +2913,9 @@ console.log(
 
 结果：
 
-![](/notebook/imgs/prototype-result2.png)
+![](../imgs/prototype-result2.png)
 
-![](/notebook/imgs/prototype-reason2.png)
+![](../imgs/prototype-reason2.png)
 
 ```javascript
 var A = function () {}
@@ -2927,7 +2927,7 @@ console.log(a.__proto__.__proto__.__proto__) // null
 
 结果：
 
-![](/notebook/imgs/prototype-result3.png)
+![](../imgs/prototype-result3.png)
 
 ---
 
@@ -3514,7 +3514,7 @@ webpack 从构建到输出文件结果的过程
 
 MVC 模式的意思是，软件可以分成三个部分。
 
-![](/notebook/imgs/mvc-mean.png)
+![](../imgs/mvc-mean.png)
 
 - 视图（View）：用户界面。
 - 控制器（Controller）：业务逻辑。
@@ -3522,7 +3522,7 @@ MVC 模式的意思是，软件可以分成三个部分。
 
 各部分之间的通信方式如下。
 
-![](/notebook/imgs/mvc-comm.png)
+![](../imgs/mvc-comm.png)
 
 - View 传送指令到 Controller
 - Controller 完成业务逻辑后，要求 Model 改变状态
@@ -3531,7 +3531,7 @@ MVC 模式的意思是，软件可以分成三个部分。
 
 MVP 模式将 Controller 改名为 Presenter，同时改变了通信方向。
 
-![](/notebook/imgs/mvp-comm.png)
+![](../imgs/mvp-comm.png)
 
 - 各部分之间的通信，都是双向的（顺时针）。
 - View 与 Model 不发生联系，都通过 Presenter 传递。
@@ -3539,7 +3539,7 @@ MVP 模式将 Controller 改名为 Presenter，同时改变了通信方向。
 
 MVVM 模式将 Presenter 改名为 ViewModel，基本上与 MVP 模式完全一致。
 
-![](/notebook/imgs/mvvm-comm.png)
+![](../imgs/mvvm-comm.png)
 
 唯一的区别是，它采用双向绑定（data-binding）：View 的变动，自动反映在 ViewModel，反之亦然。Angular  和  Ember  都采用这种模式。
 
@@ -3570,7 +3570,7 @@ MVVM 模式将 Presenter 改名为 ViewModel，基本上与 MVP 模式完全一�
 - 每个组件实例都有相应的  watcher  实例对象，它会在组件渲染的过程中把属性记录为依赖，之后当依赖项的  setter  被调用时，会通知  watcher  重新计算，从而致使它关联的组件得以更新。
 - 观察者订阅了可观察对象，当可观察对象发布事件，则就直接调度观察者的行为，所以这里观察者和可观察对象其实就产生了一个依赖的关系。
 
-![](/notebook/imgs/tail-change.png)
+![](../imgs/tail-change.png)
 
 ---
 
@@ -3592,7 +3592,7 @@ Virtual DOM 本质上就是在 JS 和 DOM 之间做了一个缓存。可以类�
 
 所以 Virtual DOM 只会对同一个层级的元素进行对比：
 
-![](/notebook/imgs/vue-diff.png)
+![](../imgs/vue-diff.png)
 
 上面的 div 只会和同一层级的 div 对比，第二层级的只会跟第二层级对比。这样算法复杂度就可以达到 O(n)。
 
@@ -3600,7 +3600,7 @@ Virtual DOM 本质上就是在 JS 和 DOM 之间做了一个缓存。可以类�
 
 在实际的代码中，会对新旧两棵树进行一个深度优先的遍历，这样每个节点都会有一个唯一的标记：
 
-![](/notebook/imgs/vue-diff-mark.png)
+![](../imgs/vue-diff-mark.png)
 
 在深度优先遍历的时候，每遍历到一个节点就把该节点和新的的树进行对比。如果有差异的话就记录到一个对象里面。
 
@@ -3641,7 +3641,7 @@ patch(root, patches)
 
 Vue 官网介绍了非父子组件通信方法：
 
-![](/notebook/imgs/vue-comm.png)
+![](../imgs/vue-comm.png)
 
 在 bus.js 里面 写入下面信息
 
@@ -3714,19 +3714,19 @@ export default {
 
 Vue 生命周期过程图解
 
-![Vue 生命周期](/notebook/imgs/vue-life.png)
+![Vue 生命周期](../imgs/vue-life.png)
 
 Vue 响应式原理
 
-![Vue 响应式原理](/notebook/imgs/vue-resp-reason.png)
+![Vue 响应式原理](../imgs/vue-resp-reason.png)
 
 Vue 过程图解
 
-![Vue 过程图解](/notebook/imgs/vue-process.png)
+![Vue 过程图解](../imgs/vue-process.png)
 
 Vuex
 
-![Vuex](/notebook/imgs/vuex-process.png)
+![Vuex](../imgs/vuex-process.png)
 
 ---
 
@@ -3849,15 +3849,15 @@ fs.readFile(filePath, function (err, data) {
 - 目前，如果你一定要让你的应用 80 端口的话，你可以有通过在 Node 应用的前方再添加一层反向代理（例如 nginx）来实现，如下图。否则，建议你直接监听大于 1024 的端口
 - 方向代理指的是以代理服务器来接收 Internet 上的连接请求，然后将请求转发给内部网络上的服务器， 并且将服务器返回的结果发送给客户端。
 
-![](/notebook/imgs/node-80.png)
+![](../imgs/node-80.png)
 
 ---
 
 **什么是事件循环 ？**
 
-- Node 采用的是单线程的处理机制(所有的 I/O 请求都采用非阻塞的工作方式)，至少从 Node.js 开发者的角度是这样的。而在底层，Node.js 借助 libuv 来作为抽象封装层，从而屏蔽不同操作系统的差异，Node 可以借助 livuv 来实现线程。下图表示 Node 和 libuv 的关系。 ![](/notebook/imgs/node-event-loop.png)
+- Node 采用的是单线程的处理机制(所有的 I/O 请求都采用非阻塞的工作方式)，至少从 Node.js 开发者的角度是这样的。而在底层，Node.js 借助 libuv 来作为抽象封装层，从而屏蔽不同操作系统的差异，Node 可以借助 livuv 来实现线程。下图表示 Node 和 libuv 的关系。 ![](../imgs/node-event-loop.png)
 
-- Libuv 库负责 Node API 的执行。它将不同的任务分配给不同的线程，形成一个事件循环，以异步的方式将任务的执行结果返回给 V8 引擎。可以简单用下面这张图来表示。 ![](/notebook/imgs/node-libuv.png)
+- Libuv 库负责 Node API 的执行。它将不同的任务分配给不同的线程，形成一个事件循环，以异步的方式将任务的执行结果返回给 V8 引擎。可以简单用下面这张图来表示。 ![](../imgs/node-libuv.png)
 
 - 每一个 I/O 都需要一个回调函数 ----- 一旦执行完便堆到事件循环上用于执行。
 
