@@ -884,9 +884,19 @@ Array.prototype.myReduce(callback, initData){
 
 ```js
 function myInstanceof(target) {
-  if (typeof target !== 'object') return
-  let result = Object.prototype.toString.call(target)
-  return result.replace(/[\['object (/s+)'\]]/gi, '').toLowerCase()
+  if (
+    !['object', 'function'].includes(typeof source) ||
+    typeof target !== 'function'
+  ) {
+    return false
+  }
+  let proto = Object.getPrototypeOf(source)
+  const prototype = target.prototype
+  while (true) {
+    if (proto === null) return false
+    if (proto === prototype) return true
+    proto = Object.getPrototypeOf(proto)
+  }
 }
 ```
 
