@@ -1302,9 +1302,9 @@ v-for="user in userList" v-if="shouldShowUserList"
 
 ## **v-if 和 v-show 的区别**
 
-- `v-if` : 使用`display:none`，如果判断为`true`则直接将`DOM节点`从 DOM 树上删除
+- `v-if` : 直接操作`虚拟DOM`控制是否允许渲染该 DOM，如果判断为`true`则直接将`DOM节点`从 DOM 树上删除
 
-- `v-show` : 使用`visibility:hidden`，如果判断为`true`则将`DOM节点`隐藏
+- `v-show` : 使用`display:none`，如果判断为`true`则将`DOM节点`隐藏
 
 ## **如何实现 v-model**
 
