@@ -1356,7 +1356,7 @@ v-for="user in userList" v-if="shouldShowUserList"
       }
       this.eventObj = eventBus.obj
     }
-    $on(fncName, callback) {
+    $emit(fncName, callback) {
       if (!this.list[fncName]) {
         this.list[fncName] = []
       }
@@ -1365,7 +1365,7 @@ v-for="user in userList" v-if="shouldShowUserList"
       return this.callbackId
     }
 
-    $emit(fncName, ...args) {
+    $on(fncName, ...args) {
       this.list[fncName].forEach(fnc => {
         fnc(...args)
       })
