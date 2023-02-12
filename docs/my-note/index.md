@@ -1505,6 +1505,8 @@ v-for="user in userList" v-if="shouldShowUserList"
 
 3. `骨架屏`
 
+4. `Vue3`的`Suspense`异步加载组件
+
 ## **Vue 的 diff 语法**
 
 > 执行逻辑：
