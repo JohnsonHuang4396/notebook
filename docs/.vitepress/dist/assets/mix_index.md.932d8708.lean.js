@@ -1,0 +1,1 @@
+import{_ as e,c as r,o as t,N as a}from"./chunks/framework.9fe2e29c.js";const j=JSON.parse('{"title":"🛫 八股文","description":"","frontmatter":{},"headers":[],"relativePath":"mix/index.md"}'),n={name:"mix/index.md"},l=a("",6),i=[l];function o(s,h,f,c,p,_){return t(),r("div",null,i)}const d=e(n,[["render",o]]);export{j as __pageData,d as default};

@@ -153,6 +153,69 @@
 
 # HTTP
 
+## HTTP1、HTTP1.X、HTTP2.0、HTTP3.0 经历了什么变化
+
+### HTTP/1.0
+
+- 在每个请求头中带上协议版本
+- 响应中包含状态码
+- 引入 HTTP 标头
+- 凭借 Content-Type 标头，得以进行除纯文本的 HTML 文档外其他类型文档的能力
+
+### HTTP/1.1
+
+- **带宽优化**
+
+  > HTTP/1.0 在响应时会将整个数据体返回，HTTP/1.1 允许只返回部分数据（206 响应码）
+
+- **响应状态码**
+
+  > HTTP/1.1 增加了 24 个错误状态码
+
+- **Host 头处理**
+
+  > 在 HTTP/1.0 的时代，一台服务器被认为只有一个 IP 指向，因此请求头和响应头都没有 Host 字段。随着虚拟主机发展，一台主机允许多个虚拟主机代理，因此在请求头和响应头中都加上了 Host 字段，当没有该字段时会返回 400 BadRequest 状态码
+
+- **长连接**
+  > 在 HTTP/1.0 时，每一个请求都会重新建立一个 TCP 链接。而 HTTP/1.1 允许多个请求和响应发生在**一个 TCP 链接**上，且默认开启`Connection: keep-alive`
+
+### HTTP/1.x && SPDY
+
+> 由 Google 提出的 SPDY 方案，一定程度上解决了 HTTP/1.x 的安全性问题
+
+- **降低延迟**
+
+  > `SPDY`使用多路复用的方法，通过多个`请求stream`公用一个 TCP 连接方法，降低了延迟的同时提高了宽带利用率
+
+- **请求优先级**
+
+  > 在多路复用的前提下，`SPDY`为每个请求设置优先级，确保重要的请求先返回（如首页等）
+
+- **强制基于`HTTPS`的加密协议传输**
+
+- **服务端推送**
+  > 允许服务器在客户端缓存中填充数据。当客户端请求了 index.js 时，服务端会将其依赖的 index.css 文件一并返回，客户端下次即可从缓存中取出 index.css 文件
+
+### HTTP/2.0
+
+- **HTTP/2.0 支持明文传输**
+
+- **二进制编码**
+
+  > HTTP/1.x 都是基于文本的，由于文本类型繁多，解析难度大，而 HTTP/2.0 将所有信息拆解成二进制格式进行编码，便捷且更加健壮
+
+  > 并且 HTTP/2.0 将 Header 和 Data 分别拆解成更小的二进制格式帧后，分别插入 Header 帧和 Data 帧中，传输到服务器后由服务器重新组装为 HTTP/1.x 的格式
+
+- **多路复用**
+
+  > HTTP/2.0 允许在一个 TCP 链接上使用多个 stream 进行传输，同时由于将请求拆解成二进制帧，避免了 HTTP/1.x 的队头阻塞问题
+
+- **Header 压缩**
+
+  > `HTTP1.X`的`header`带有大量信息，且每次都重新发送，`HTTP2.0`使用`encode`减少传输的`header`大小，通信双方各持一份`header fields表`，标头的重复字段将不会重复发送，同时加上在 gzip 压缩后发送，大大压缩了标头的大小
+
+- **服务端推送**
+
 ## OSI 七层应用模型
 
 > 应用层
@@ -1467,10 +1530,10 @@ v-for="user in userList" v-if="shouldShowUserList"
 >
 > <script>
 >   let myComponent1 = {
->     template: `<div>myComponent1</div>`,
+>     template: `<div>myComponent1</div>`
 >   }
 >   let myComponent2 = {
->     template: `<div>myComponent2</div>`,
+>     template: `<div>myComponent2</div>`
 >   }
 >   let activeComponentName = 'myComponent1'
 > </script>
@@ -1598,9 +1661,9 @@ v-for="user in userList" v-if="shouldShowUserList"
    >           onClick:
    >             _cache[0] ||
    >             (_cache[0] = (...args) =>
-   >               _ctx.handleClick && _ctx.handleClick(...args)),
+   >               _ctx.handleClick && _ctx.handleClick(...args))
    >         },
-   >         '按钮',
+   >         '按钮'
    >       )
    >     )
    >   }
@@ -1623,7 +1686,7 @@ v-for="user in userList" v-if="shouldShowUserList"
    >     'div',
    >     null,
    >     '沐华',
-   >     -1 /* 静态标记 */,
+   >     -1 /* 静态标记 */
    >   )
    >
    >   export function render(_ctx, _cache, $props, $setup, $data, $options) {
@@ -1635,8 +1698,8 @@ v-for="user in userList" v-if="shouldShowUserList"
    >           'p',
    >           null,
    >           _toDisplayString(_ctx.age),
-   >           1 /* 表明为静态节点 */,
-   >         ),
+   >           1 /* 表明为静态节点 */
+   >         )
    >       ])
    >     )
    >   }
