@@ -1739,6 +1739,27 @@ v-for="user in userList" v-if="shouldShowUserList"
 
 # 性能优化 && 兼容
 
+### 如何平衡各浏览器间的样式差异
+
+1. **使用 CSS Reset**
+
+   > CSS Reset 是一种优秀的技术，它可以将所有浏览器的默认样式重置为相同的值。这样，您就可以在各种浏览器之间获得一致的外观和行为。常见的 CSS Reset 包括 `Eric Meyer's Reset CSS` 和 `Normalize.css`。
+
+2. **使用 CSS Prefixes**
+
+   > CSS 前缀是一种浏览器供应商特定的 CSS 属性或值。例如，`-webkit-`是 Chrome 和 Safari 浏览器的前缀，`-moz-`是 Firefox 浏览器的前缀。您可以使用 CSS 前缀来指定不同浏览器的特定样式，从而获得一致的外观和行为。
+
+3. **使用 CSS Hack**
+
+   > CSS Hack 是一种在不同浏览器之间应用不同 CSS 样式的技术。它可以帮助您解决浏览器之间的差异，但也可能导致代码混乱和难以维护。因此，建议只在必要时使用 CSS Hack，而不是在整个代码库中使用。
+
+4. **使用 CSS Polyfills**
+
+   > CSS Polyfills 是一种 JavaScript 库，它可以在不支持某些 CSS 特性的浏览器中模拟这些特性。例如，`Modernizr` 是一个流行的 CSS Polyfills 库，它可以检测浏览器是否支持某些 CSS 属性，并在不支持的浏览器中提供替代方案。
+
+5. **测试和调试**
+   > 最后，测试和调试是平衡各个浏览器之间的差异的关键。您应该在各种浏览器和设备上测试您的 CSS，并使用工具（如浏览器开发人员工具和 CSS Validator）来调试和优化您的 CSS 代码。
+
 ## 首屏优化
 
 ### 代码层面
