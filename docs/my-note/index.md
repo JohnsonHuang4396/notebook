@@ -1735,7 +1735,9 @@ v-for="user in userList" v-if="shouldShowUserList"
    - 尾和尾比
    - 基于最长递增子序列进行移动/添加/删除
 
-## **[Vue 的 250 答](https://juejin.cn/post/6844903876231954446#heading-8)**
+## **Vue 的 250 答**
+
+[Vue 的 250 答](https://juejin.cn/post/6844903876231954446#heading-8)
 
 # 性能优化 && 兼容
 
