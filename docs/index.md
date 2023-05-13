@@ -5,7 +5,7 @@ title: Note
 titleTemplate: 我的笔记
 
 hero:
-  name: 知识点笔记
+  name: 知识点笔记123
   actionText: Get Started
   actionLink: /js/
   image:
