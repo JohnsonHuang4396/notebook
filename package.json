@@ -7,12 +7,14 @@
   "author": "INeedAGodDamnGUN <1771032483@qq.com>",
   "license": "MIT",
   "devDependencies": {
+    "release-it": "^15.10.3",
     "sass": "^1.55.0",
     "vitepress": "^1.0.0-alpha.26"
   },
   "scripts": {
     "dev": "vitepress dev docs",
     "build": "vitepress build docs",
-    "serve": "vitepress serve docs"
+    "serve": "vitepress serve docs",
+    "release": "release-it"
   }
 }
