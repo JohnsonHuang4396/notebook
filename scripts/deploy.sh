@@ -4,10 +4,10 @@
 set -e
 
 # 生成静态文件
-npm run docs:build
+npm run build
 
 # 进入生成的文件夹
-cd docs/.vuepress/dist
+cd ../docs/.vitepress/dist
 
 # 拷贝目录和文件
 cp -r ../../../.github ./
@@ -17,6 +17,6 @@ git add -A
 git commit -m 'deploy'
 
 # 如果发布到 https://<USERNAME>.github.io/<REPO>
-git push -f git@github.com:Jhonson1z/notebook.git master:main
+git push -f git@github.com:Jhonson1z/notebook.git master:gh-pages
 
 cd -

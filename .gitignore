@@ -1,2 +1,3 @@
 node_modules
-depoly.sh
+docs/.vitepress/dist
+docs/.vitepress/dist/*
