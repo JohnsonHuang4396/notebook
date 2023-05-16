@@ -42,7 +42,11 @@
 
   ```html
   <!----  a.html  -->
-  <iframe src="http://b.demo.com" id="iframe" onload="onload()" />
+  <iframe
+    src="http://b.demo.com"
+    id="iframe"
+    onload="onload()"
+  />
   <script>
     function onload() {
       const iframe = document.querySelector('#iframe')
@@ -809,251 +813,7 @@ function myNew(constructor, ...args) {
 
 - `async\await` : `async\await`是基于`Promise`实现的异步解决方法，属于`微任务`，只有当`await`的返回值为`resolve`时函数才会继续向下执行，并且需要在`async`函数结尾用`catch`捕获错误才能执行函数
 
-## **实现 Promise.all**
 
-> 思路 :
->
-> 1. 首先判断传入的参数是否为`可遍历对象`，如果不是则直接`reject`
->
-> 2. 判断是否为`空数组`，如果是则直接`resolve([])`
->
-> 3. `遍历promises`并将执行结果存进`result`，当`promises`全部`resolve执行`完毕则返回`resolve(result数组)`，当有一个出现错误则直接退出循环返回`reject(错误)`结束`Promise.all`函数
-
-```js
-Promise.myAll = function (promises) {
-  return new Promise((resolve, reject) => {
-    if (typeof promises[Symbol.iterator] !== 'function') {
-      reject('promises typeError!')
-    }
-    if (promises.length == 0) {
-      resolve([])
-    } else {
-      let result = []
-      let count = 0
-      const length = promises.length
-      for (let i = 0; i < length; i++) {
-        Promise.resolve(promises[i])
-          .then(value => {
-            result[i] = value
-            if (++count === length) {
-              resolve(result)
-            }
-          })
-          .catch(error => {
-            reject(error)
-          })
-      }
-    }
-  })
-}
-```
-
-## **防抖和节流**
-
-- `防抖` :
-
-  ```js
-  /**
-   * @description 防抖的立即执行版本
-   */
-  function debounce(fnc, delay, immediate) {
-    let timer = null
-    return function () {
-      let args = arguments,
-        _this = this
-      if (timer) clearTimeout(timer)
-      if (immediate) {
-        let callNow = !timer // callNew立即执行的时机为timer=null时
-        timer = setTimeout(() => {
-          timer = null
-        }, delay)
-        if (callNow) fnc.call(_this, ...args)
-      } else {
-        timer = setTimeout(() => {
-          fnc.call(_this, ...args)
-        }, delay)
-      }
-    }
-  }
-  ```
-
-- `节流` :
-  ```js
-  function throttle(fnc, delay) {
-    let timer = null
-    return function () {
-      let _this = this,
-        args = arguments
-      if (!timer) {
-        setTimeout(() => {
-          fnc.call(_this, ...args)
-          timer = null
-        }, delay)
-      }
-    }
-  }
-  ```
-
-## **深拷贝**
-
-```js
-function deepClone(target) {
-  if (typeof target !== 'object') {
-    console.log('type must be object')
-    return
-  }
-  let result = target instanceof Array ? [] : {}
-  for (const key in target) {
-    if (Object.hasOwnProperty.call(target, key)) {
-      const element = target[key]
-      result[key] = typeof element === 'object' ? deepClone(element) : element
-    }
-  }
-  return result
-}
-```
-
-## **柯里化**
-
-> 思路 : 当函数`传参不够`时返回`柯里化函数`，`柯里化函数`允许继续传参并将参数存储，`传参足够`时执行函数
-
-```js
-function myCurry(fnc, ...args) {
-  let argsLength = fnc.length
-  args = args || []
-  return function (...rest) {
-    let _args = [...args, ...rest]
-    return _args.length <= argsLength
-      ? myCurry(fnc, ..._args)
-      : fnc.call(this, ..._args)
-  }
-}
-```
-
-## **Compose**
-
-```js
-const compose = function (...args) {
-  const init = args.pop()
-  return function (...arg) {
-    return args.reverse().reduce(function (sequence, func) {
-      return sequence.then(function (result) {
-        return func.call(null, result)
-      })
-    }, Promise.resolve(init.apply(null, arg)))
-  }
-}
-```
-
-## **Pipe**
-
-```js
-const pipe = function (...args) {
-  const init = args.shift()
-  return function (...arg) {
-    return args.reduce(function (sequence, func) {
-      return sequence.then(function (result) {
-        return func.call(null, result)
-      })
-    }, Promise.resolve(init.apply(null, arg)))
-  }
-}
-```
-
-## **手写 reduce**
-
-```js
-Array.prototype.myReduce(callback, initData){
-     const arr = this
-     let total = initData || arr[0]
-     for (let index = initData ? 0 : 1; index < arr.length; index++) {
-          total =  callback(total, arr[index], arr)
-     }
-     return total
-}
-```
-
-## **手写 instanceof**
-
-```js
-function myInstanceof(target) {
-  if (
-    !['object', 'function'].includes(typeof source) ||
-    typeof target !== 'function'
-  ) {
-    return false
-  }
-  let proto = Object.getPrototypeOf(source)
-  const prototype = target.prototype
-  while (true) {
-    if (proto === null) return false
-    if (proto === prototype) return true
-    proto = Object.getPrototypeOf(proto)
-  }
-}
-```
-
-## **数组扁平化**
-
-```js
-function flatArr(arr) {
-  return arr.reduce((pre, next) => {
-    return pre.concat(next instanceof Array ? flatArr(next) : next)
-  }, [])
-}
-```
-
-## **冒泡排序**
-
-```js
-function bubble(targetArr, sortType = 'bigToSmall') {
-  for (let i = 0; i < targetArr.length - 1; i++) {
-    for (let j = 0; j < targetArr.length - 1 - i; j++) {
-      if (
-        sortType == 'bigToSmall'
-          ? targetArr[j] < targetArr[j + 1]
-          : targetArr[j] > targetArr[j + 1]
-      ) {
-        let item = targetArr[j]
-        targetArr[j] = targetArr[j + 1]
-        targetArr[j + 1] = item
-      }
-    }
-  }
-}
-```
-
-## **斐波那契数列**
-
-```js
-1、 递归法
-function fibonacciMemorization(index) {
-  const memo = [0, 1]
-  const fibonacci = n => {
-    if (memo[n] !== null) return memo[n]
-    const result = fibonacci(n - 1) + fibonacci(n - 2)
-    memo[n] = result
-    return result
-  }
-  return fibonacci(index)
-}
-
-2、 循环法
-function fibonacciMemorization(n) {
-  if (n < 2) {
-    return n
-  }
-  let p = 0
-  let q = 0
-  let r = 1
-  for (let i = 2; i <= n; ++i) {
-    p = q
-    q = r
-    r = p + q
-  }
-  return r
-}
-```
 
 # CSS
 
@@ -1446,7 +1206,10 @@ v-for="user in userList" v-if="shouldShowUserList"
 <input v-model="userName" />
 
 <!-- 原理 -->
-<input :value="userName" @input="userName = $event.target.value" />
+<input
+  :value="userName"
+  @input="userName = $event.target.value"
+/>
 ```
 
 ## **nextTick 的作用**
