@@ -1,0 +1,1 @@
+import{_ as e,c as l,o as a,N as t}from"./chunks/framework.9fe2e29c.js";const u=JSON.parse('{"title":"✍️ 手写","description":"","frontmatter":{},"headers":[],"relativePath":"hand-write/index.md"}'),i={name:"hand-write/index.md"},o=t("",2),r=[o];function p(m,n,d,h,s,c){return a(),l("div",null,r)}const f=e(i,[["render",p]]);export{u as __pageData,f as default};

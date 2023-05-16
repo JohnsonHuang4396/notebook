@@ -1,0 +1,1 @@
+import{_ as s,c as n,o as a,N as l}from"./chunks/framework.9fe2e29c.js";const A=JSON.parse('{"title":"","description":"","frontmatter":{},"headers":[],"relativePath":"hand-write/module/instanceof.md"}'),p={name:"hand-write/module/instanceof.md"},o=l("",2),e=[o];function t(r,c,F,y,D,i){return a(),n("div",null,e)}const u=s(p,[["render",t]]);export{A as __pageData,u as default};

@@ -1,0 +1,1 @@
+import{_ as s,c as a,o as n,N as l}from"./chunks/framework.9fe2e29c.js";const d=JSON.parse('{"title":"","description":"","frontmatter":{},"headers":[],"relativePath":"hand-write/module/flat.md"}'),o={name:"hand-write/module/flat.md"},p=l("",2),e=[p];function t(r,c,F,y,i,D){return n(),a("div",null,e)}const C=s(o,[["render",t]]);export{d as __pageData,C as default};
