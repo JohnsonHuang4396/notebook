@@ -3,8 +3,8 @@
   "version": "1.0.2",
   "description": "个人文档",
   "main": "index.ts",
-  "repository": "https://gitee.com/huang-qihao123/note-book.git",
-  "author": "INeedAGodDamnGUN <1771032483@qq.com>",
+  "repository": "https://github.com/JohnsonHuang4396/notebook.git",
+  "author": "JohnsonHuang4396 <1771032483@qq.com>",
   "license": "MIT",
   "devDependencies": {
     "release-it": "^15.10.3",
