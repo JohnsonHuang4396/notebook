@@ -16,7 +16,7 @@
 >
 > ```nginx
 > location /bigScreen {
->       
+>       ...
 > }
 > ```
 >
