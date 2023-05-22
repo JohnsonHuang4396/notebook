@@ -1,6 +1,6 @@
 {
   "name": "note-book",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "个人文档",
   "main": "index.ts",
   "repository": "https://github.com/JohnsonHuang4396/notebook.git",
