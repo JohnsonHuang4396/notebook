@@ -100,18 +100,23 @@
             proxy_set_header X-Real-IP $remote_addr;
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
             proxy_set_header Host $http_host;
+            # 定义代理请求头，可以在这里对请求头做校验工作
         }
 
         # 配置 HTTPS 重定向
         if ($scheme != "https") {
             return 301 https://$server_name$request_uri;
         }
+        # $scheme以变量形式存储请求是否为SSL，更多变量可以查看 http://nginx.org/en/docs/http/ngx_http_core_module.html#variables
 
         # 定义 error_page 区域
         error_page 404 /404.html;
+        # 当出现404错误时，跳转至404.html
+
         location = /404.html {
             internal;
         }
+        # 表示404页面只有当出现404错误时才会出现，并且由Nginx进行内部跳转，即使修改url也无法进入404页面
     }
 
     server {
@@ -119,3 +124,9 @@
         ...
     }
 ```
+
+# 后记
+
+这一次的事故虽然花了不少时间处理，但总的来说还是有收获的，而且了解Nginx对于前端从事人员来说也是很重要的一环，之后我也会更加深入的学习Nginx，并且多进行实践。
+
+> PS: 笔者在写本文时尚处于Nginx小白阶段，如果文中有任何错误，烦请在评论中指出，我会尽快进行修改，感激不尽！
