@@ -16,5 +16,6 @@
     "build": "vitepress build docs",
     "serve": "vitepress serve docs",
     "release": "release-it"
-  }
+  },
+  "packageManager": "pnpm@8.15.5"
 }
