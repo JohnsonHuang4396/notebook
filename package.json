@@ -7,9 +7,9 @@
   "author": "JohnsonHuang4396 <1771032483@qq.com>",
   "license": "MIT",
   "devDependencies": {
-    "release-it": "^15.10.3",
-    "sass": "^1.55.0",
-    "vitepress": "^1.0.0-alpha.26"
+    "release-it": "^17.1.1",
+    "sass": "^1.72.0",
+    "vitepress": "^1.0.1"
   },
   "scripts": {
     "dev": "vitepress dev docs",
