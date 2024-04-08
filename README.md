@@ -1,6 +1,6 @@
 # 介绍
 
-> 这是 Johnson Huang 的[博客](https://ineedagoddamngun.gitee.io/notebook/)，基于`Vitepress`实现
+> 这是 Johnson Huang 的[博客](https://johnsonhuang4396.github.io/notebook/)，基于`Vitepress`实现
 
 # 目录
 
