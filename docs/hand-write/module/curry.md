@@ -8,7 +8,7 @@ function myCurry(fnc, ...args) {
   args = args || []
   return function (...rest) {
     let _args = [...args, ...rest]
-    return _args.length <= argsLength
+    return _args.length < argsLength
       ? myCurry(fnc, ..._args)
       : fnc.call(this, ..._args)
   }
