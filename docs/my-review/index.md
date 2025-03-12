@@ -1,3 +1,8 @@
+---
+title: '我的面经'
+
+date: 2025/3/11 16:14:51
+---
 # HTML
 
 ## **页面通信**
@@ -659,6 +664,105 @@ function showScope() {
 showScope()()
 ```
 
+## **继承的几种方式**
+
+1. 原型链继承
+通过将子类的原型指向父类的实例来实现继承。这种方式是JavaScript中最基本的继承方式，但存在一些问题，比如引用类型的属性会被所有实例共享。
+```js
+function Parent() {
+    this.colors = ["red", "blue"];
+}
+function Child() {}
+Child.prototype = new Parent();
+```
+
+2. 构造函数继承
+通过在子类的构造函数中调用父类的构造函数来实现继承。这种方式可以继承父类的实例属性，但无法继承父类的原型属性。
+```js
+function Parent() {
+    this.colors = ["red", "blue"];
+}
+function Child() {
+    Parent.call(this); // 调用父类构造函数
+}
+```
+
+3. 组合继承
+结合原型链继承和构造函数继承的方式。通过在子类的构造函数中调用父类的构造函数来继承实例属性，同时通过原型链继承父类的原型方法。这种方式是目前最常用的继承方式之一。
+```js
+function Parent() {
+    this.colors = ["red", "blue"];
+}
+Parent.prototype.getColor = function() {
+    return this.colors;
+};
+function Child() {
+    Parent.call(this); // 构造函数继承
+}
+Child.prototype = new Parent(); // 原型链继承
+Child.prototype.constructor = Child; // 修复构造函数指向
+```
+
+4. 原型式继承
+通过`Object.create()`方法创建一个新对象，并指定一个对象作为新对象的原型。这种方式主要用于对象之间的继承，而不是类之间的继承。
+```js
+const parent = {
+    colors: ["red", "blue"]
+};
+const child = Object.create(parent);
+```
+
+5. 寄生式继承
+基于原型式继承的基础上，通过增强对象来实现继承。这种方式也是用于对象之间的继承。
+```js
+const parent = {
+    colors: ["red", "blue"]
+};
+function createChild(parent) {
+    const child = Object.create(parent);
+    child.getColors = function() {
+        return this.colors;
+    };
+    return child;
+}
+const child = createChild(parent);
+```
+
+6. 寄生组合式继承
+结合组合继承的优点，同时避免组合继承中父类构造函数被调用两次的问题。这是目前最理想的继承方式。
+```js
+function Parent() {
+    this.colors = ["red", "blue"];
+}
+Parent.prototype.getColor = function() {
+    return this.colors;
+};
+function Child() {
+    Parent.call(this);
+}
+Child.prototype = Object.create(Parent.prototype); // 使用Object.create代替new Parent()
+Child.prototype.constructor = Child;
+```
+
+7. 类继承（ES6`class`）
+ES6引入了`class`语法，它本质上是基于原型链和构造函数的语法糖，使得类继承更加简洁和易于理解。`class`继承属于组合继承的一种改进形式。
+```js
+class Parent {
+    constructor() {
+        this.colors = ["red", "blue"];
+    }
+    getColor() {
+        return this.colors;
+    }
+}
+class Child extends Parent {
+    constructor() {
+        super(); // 调用父类构造函数
+    }
+}
+```
+> 在`class`继承中，`extends`关键字用于指定父类，`super()`用于调用父类的构造函数。`class`语法背后仍然是基于原型链和构造函数的机制，但它提供了一种更接近传统面向对象语言的语法风格。
+
 ## **垃圾回收机制**
 
 - `引用计数法` : 当一个值被对象引用时，它的`引用计数 + 1`，而引用减少时，它的`引用计数 - 1`。当它的`引用计数 == 0`时，则表示不再被引用而被系统回收内存
@@ -813,7 +917,88 @@ function myNew(constructor, ...args) {
 
 - `async\await` : `async\await`是基于`Promise`实现的异步解决方法，属于`微任务`，只有当`await`的返回值为`resolve`时函数才会继续向下执行，并且需要在`async`函数结尾用`catch`捕获错误才能执行函数
 
+## **Web Worker**
 
+### **Web Worker 和主线程之间的交互是怎么实现的？**
+
+1. 通过`postMessage`和`onMessage`实现
+
+2. `MessageChannel`实现复杂通信
+```js
+const channel = new MessageChannel();
+worker.postMessage({ port: channel.port1 }, [channel.port1]);
+
+channel.port2.onmessage = function(event) {
+  console.log('Received message from worker:', event.data);
+};
+```
+
+### **postMessage 如何区分是 iframe 还是 Web Worker 发的消息**
+
+1. 加标识
+
+2. `event.source`
+```js
+window.addEventListener('message', function(event) {
+  if (event.source === null) {
+    console.log('Message from Web Worker:', event.data);
+  } else if (event.source === iframe.contentWindow) {
+    console.log('Message from iframe:', event.data);
+  }
+});
+```
+
+3. 使用不同的监听器
+```js
+// Web Worker监听器：
+worker.onmessage = function(event) {
+  console.log('Message from Web Worker:', event.data);
+};
+
+// ​iframe 监听器：
+window.addEventListener('message', function(event) {
+  if (event.source === iframe.contentWindow) {
+    console.log('Message from iframe:', event.data);
+  }
+});
+```
+
+4. 通过`MessageChannel`区分
+```js
+//Web Worker 使用 MessageChannel：
+const channel = new MessageChannel();
+worker.postMessage({ port: channel.port1 }, [channel.port1]);
+
+channel.port2.onmessage = function(event) {
+  console.log('Message from Web Worker:', event.data);
+};
+
+// ​iframe 使用 postMessage：
+iframe.contentWindow.postMessage('Hello from iframe', '*');
+```
+
+5. ​检查`event.origin`
+```js
+window.addEventListener('message', function(event) {
+  if (event.origin === '') {
+    console.log('Message from Web Worker:', event.data);
+  } else if (event.origin === 'https://example.com') {
+    console.log('Message from iframe:', event.data);
+  }
+});
+```
+
+### **如何区分不同脚本的`Web Worker`的传递过来的消息**
+
+1. 通过`event.origin`
+
+2. 通过`event.source`
+
+3. 通过`event.data`
+
+4. 通过`MessageChannel`
+
+5. 通过`postMessage`
 
 # CSS
 
