@@ -1,8 +1,9 @@
 ---
-title: '我的面经'
+title: "我的面经"
 
 date: 2025/3/11 16:14:51
 ---
+
 # HTML
 
 ## **页面通信**
@@ -47,18 +48,14 @@ date: 2025/3/11 16:14:51
 
   ```html
   <!----  a.html  -->
-  <iframe
-    src="http://b.demo.com"
-    id="iframe"
-    onload="onload()"
-  />
+  <iframe src="http://b.demo.com" id="iframe" onload="onload()" />
   <script>
     function onload() {
-      const iframe = document.querySelector('#iframe')
-      iframe.contentWindow.postMessage('i love u', 'http://b.demo.com')
+      const iframe = document.querySelector("#iframe");
+      iframe.contentWindow.postMessage("i love u", "http://b.demo.com");
       window.onmessage = function (event) {
-        console.log('b event  :>>', event.data)
-      }
+        console.log("b event  :>>", event.data);
+      };
     }
   </script>
   ```
@@ -66,9 +63,9 @@ date: 2025/3/11 16:14:51
   ```js
   // b.html
   window.onmessage = function (event) {
-    console.log('a event  :>>', event.data)
-    event.postMessage('i love u too', 'http://a.demo.com')
-  }
+    console.log("a event  :>>", event.data);
+    event.postMessage("i love u too", "http://a.demo.com");
+  };
   ```
 
   2.  `cors` : 服务器设置`Access-Control-Allow-Origin`和后端处理
@@ -294,7 +291,7 @@ date: 2025/3/11 16:14:51
 
 **206:请求成功，服务器返回部分内容**
 
-> **304:访问内容未修改**
+**304:访问内容未修改**
 
 **305:访问内容需要代理**
 
@@ -302,9 +299,9 @@ date: 2025/3/11 16:14:51
 
 **400:请求路径无法识别**
 
-**401:客户端发送的请求内容与服务器要求不一致**
+**401:请求未通过身份验证**
 
-> **402:请求需要验证**
+**402:请求需要付款**
 
 **403:服务器拒绝访问**
 
@@ -408,7 +405,7 @@ date: 2025/3/11 16:14:51
 >   2.  字符串以 URL 编码形式编码
 >       ```js
 >       // 封装过程：{a:1, b:2} => a=1&b=2，如下格式
->       'a%3D1%26b%3D2'
+>       "a%3D1%26b%3D2";
 >       ```
 >
 > - `multiple/form-data`
@@ -504,33 +501,33 @@ date: 2025/3/11 16:14:51
 > `函数提升`要优先于`变量提升`，`函数`会在`变量被创建之前`就已经声明
 
 ```js
-console.log(fnc) // undefined
-var fnc = 'im a fnc'
+console.log(fnc); // undefined
+var fnc = "im a fnc";
 fnc = function () {
-  return 'im true fnc'
-}
-console.log(fnc()) // im true fnc
+  return "im true fnc";
+};
+console.log(fnc()); // im true fnc
 ```
 
 ```js
-console.log(fnc) // function fnc()
-var fnc = 'ima a fnc'
+console.log(fnc); // function fnc()
+var fnc = "ima a fnc";
 function fnc() {
-  return 'im true fnc'
+  return "im true fnc";
 }
-console.log(fnc()) // TypeError
+console.log(fnc()); // TypeError
 ```
 
 ```js
-console.log(fnc) // function fnc()
+console.log(fnc); // function fnc()
 var fnc = function () {
-  console.log('im final fnc')
-}
+  console.log("im final fnc");
+};
 function fnc() {
-  return 'im true fnc'
+  return "im true fnc";
 }
-fnc = 'im a fnc'
-console.log(fnc()) // TypeError
+fnc = "im a fnc";
+console.log(fnc()); // TypeError
 ```
 
 ## **JS 的类型检测方案**
@@ -566,10 +563,10 @@ console.log(fnc()) // TypeError
 ## **如何区分 Null**
 
 ```js
-if (myNull === null) console.log('this is a null')
+if (myNull === null) console.log("this is a null");
 
-if (!myNull && typeof myNull !== 'undefined' && myNull !== 0)
-  console.log('this is a null')
+if (!myNull && typeof myNull !== "undefined" && myNull !== 0)
+  console.log("this is a null");
 ```
 
 ## **如何区分 NaN**
@@ -580,7 +577,7 @@ if (!myNull && typeof myNull !== 'undefined' && myNull !== 0)
 
 - `利用NaN不等于自身的特性` :
   ```js
-  if (myNaN !== myNaN) console.log('myNaN is NaN')
+  if (myNaN !== myNaN) console.log("myNaN is NaN");
   ```
 
 ## **遍历数组的方法**
@@ -606,26 +603,26 @@ if (!myNull && typeof myNull !== 'undefined' && myNull !== 0)
 - `使用Set的唯一值特性` :
 
   ```js
-  let arr = [1, 2, 3, 1, 1, 1, 2]
-  arr = [...new Set(arr)]
+  let arr = [1, 2, 3, 1, 1, 1, 2];
+  arr = [...new Set(arr)];
   ```
 
 - `reduce遍历数组` :
 
   ```js
-  let arr = [1, 2, 3, 1, 1, 1, 2]
+  let arr = [1, 2, 3, 1, 1, 1, 2];
   arr.reduce((pre, next) => {
-    if (pre.indexOf(next) == -1) pre.push(next)
-    return pre
-  }, [])
+    if (pre.indexOf(next) == -1) pre.push(next);
+    return pre;
+  }, []);
   ```
 
 - `filter筛选` :
   ```js
-  let arr = [1, 2, 3, 1, 1, 1, 2]
+  let arr = [1, 2, 3, 1, 1, 1, 2];
   arr.filter((item, index) => {
-    return arr.indexOf(item) === index
-  })
+    return arr.indexOf(item) === index;
+  });
   ```
 
 ## **作用域和作用域链**
@@ -640,127 +637,135 @@ if (!myNull && typeof myNull !== 'undefined' && myNull !== 0)
 
 ```js
 // 例子1
-let scope = 'global scope'
+let scope = "global scope";
 
 function showScope() {
-  let scope = 'local scope'
+  let scope = "local scope";
   return function show() {
-    return scope
-  }
-  return show()
+    return scope;
+  };
+  return show();
 }
-showScope()
+showScope();
 
 // 例子2
-let scope = 'global scope'
+let scope = "global scope";
 
 function showScope() {
-  let scope = 'local scope'
+  let scope = "local scope";
   return function show() {
-    return scope
-  }
-  return show
+    return scope;
+  };
+  return show;
 }
-showScope()()
+showScope()();
 ```
 
 ## **继承的几种方式**
 
 1. 原型链继承
-通过将子类的原型指向父类的实例来实现继承。这种方式是JavaScript中最基本的继承方式，但存在一些问题，比如引用类型的属性会被所有实例共享。
+   通过将子类的原型指向父类的实例来实现继承。这种方式是 JavaScript 中最基本的继承方式，但存在一些问题，比如引用类型的属性会被所有实例共享。
+
 ```js
 function Parent() {
-    this.colors = ["red", "blue"];
+  this.colors = ["red", "blue"];
 }
 function Child() {}
 Child.prototype = new Parent();
 ```
 
 2. 构造函数继承
-通过在子类的构造函数中调用父类的构造函数来实现继承。这种方式可以继承父类的实例属性，但无法继承父类的原型属性。
+   通过在子类的构造函数中调用父类的构造函数来实现继承。这种方式可以继承父类的实例属性，但无法继承父类的原型属性。
+
 ```js
 function Parent() {
-    this.colors = ["red", "blue"];
+  this.colors = ["red", "blue"];
 }
 function Child() {
-    Parent.call(this); // 调用父类构造函数
+  Parent.call(this); // 调用父类构造函数
 }
 ```
 
 3. 组合继承
-结合原型链继承和构造函数继承的方式。通过在子类的构造函数中调用父类的构造函数来继承实例属性，同时通过原型链继承父类的原型方法。这种方式是目前最常用的继承方式之一。
+   结合原型链继承和构造函数继承的方式。通过在子类的构造函数中调用父类的构造函数来继承实例属性，同时通过原型链继承父类的原型方法。这种方式是目前最常用的继承方式之一。
+
 ```js
 function Parent() {
-    this.colors = ["red", "blue"];
+  this.colors = ["red", "blue"];
 }
-Parent.prototype.getColor = function() {
-    return this.colors;
+Parent.prototype.getColor = function () {
+  return this.colors;
 };
 function Child() {
-    Parent.call(this); // 构造函数继承
+  Parent.call(this); // 构造函数继承
 }
 Child.prototype = new Parent(); // 原型链继承
 Child.prototype.constructor = Child; // 修复构造函数指向
 ```
 
 4. 原型式继承
-通过`Object.create()`方法创建一个新对象，并指定一个对象作为新对象的原型。这种方式主要用于对象之间的继承，而不是类之间的继承。
+   通过`Object.create()`方法创建一个新对象，并指定一个对象作为新对象的原型。这种方式主要用于对象之间的继承，而不是类之间的继承。
+
 ```js
 const parent = {
-    colors: ["red", "blue"]
+  colors: ["red", "blue"],
 };
 const child = Object.create(parent);
 ```
 
 5. 寄生式继承
-基于原型式继承的基础上，通过增强对象来实现继承。这种方式也是用于对象之间的继承。
+   基于原型式继承的基础上，通过增强对象来实现继承。这种方式也是用于对象之间的继承。
+
 ```js
 const parent = {
-    colors: ["red", "blue"]
+  colors: ["red", "blue"],
 };
 function createChild(parent) {
-    const child = Object.create(parent);
-    child.getColors = function() {
-        return this.colors;
-    };
-    return child;
+  const child = Object.create(parent);
+  child.getColors = function () {
+    return this.colors;
+  };
+  return child;
 }
 const child = createChild(parent);
 ```
 
 6. 寄生组合式继承
-结合组合继承的优点，同时避免组合继承中父类构造函数被调用两次的问题。这是目前最理想的继承方式。
+   结合组合继承的优点，同时避免组合继承中父类构造函数被调用两次的问题。这是目前最理想的继承方式。
+
 ```js
 function Parent() {
-    this.colors = ["red", "blue"];
+  this.colors = ["red", "blue"];
 }
-Parent.prototype.getColor = function() {
-    return this.colors;
+Parent.prototype.getColor = function () {
+  return this.colors;
 };
 function Child() {
-    Parent.call(this);
+  Parent.call(this);
 }
 Child.prototype = Object.create(Parent.prototype); // 使用Object.create代替new Parent()
 Child.prototype.constructor = Child;
 ```
 
 7. 类继承（ES6`class`）
-ES6引入了`class`语法，它本质上是基于原型链和构造函数的语法糖，使得类继承更加简洁和易于理解。`class`继承属于组合继承的一种改进形式。
+   ES6 引入了`class`语法，它本质上是基于原型链和构造函数的语法糖，使得类继承更加简洁和易于理解。`class`继承属于组合继承的一种改进形式。
+
 ```js
 class Parent {
-    constructor() {
-        this.colors = ["red", "blue"];
-    }
-    getColor() {
-        return this.colors;
-    }
+  constructor() {
+    this.colors = ["red", "blue"];
+  }
+  getColor() {
+    return this.colors;
+  }
 }
 class Child extends Parent {
-    constructor() {
-        super(); // 调用父类构造函数
-    }
+  constructor() {
+    super(); // 调用父类构造函数
+  }
 }
 ```
+
 > 在`class`继承中，`extends`关键字用于指定父类，`super()`用于调用父类的构造函数。`class`语法背后仍然是基于原型链和构造函数的机制，但它提供了一种更接近传统面向对象语言的语法风格。
 
 ## **垃圾回收机制**
@@ -795,42 +800,42 @@ class Child extends Parent {
 
   ```js
   Function.prototype.myCall = function (context, ...args) {
-    const _this = context == undefined ? window : Object(context) // 如果有传this就用Object改造为对象
-    const key = Symbol() // 防止key值重复
-    _this[key] = this // 绑定作用域
-    const result = _this[key](...args)
-    delete _this[key]
-    return result
-  }
+    const _this = context == undefined ? window : Object(context); // 如果有传this就用Object改造为对象
+    const key = Symbol(); // 防止key值重复
+    _this[key] = this; // 绑定作用域
+    const result = _this[key](...args);
+    delete _this[key];
+    return result;
+  };
   ```
 
 - `apply` :
 
   ```js
   Function.prototype.myApply = function (context, args = []) {
-    const _this = context == undefined ? window : Object(context) // 如果有传this就用Object改造为对象
-    const key = Symbol() // 防止key值重复
-    _this[key] = this // 绑定作用域
-    const result = _this[key](...args)
-    delete _this[key]
-    return result
-  }
+    const _this = context == undefined ? window : Object(context); // 如果有传this就用Object改造为对象
+    const key = Symbol(); // 防止key值重复
+    _this[key] = this; // 绑定作用域
+    const result = _this[key](...args);
+    delete _this[key];
+    return result;
+  };
   ```
 
 - `bind` :
   ```js
   Function.prototype.myBind = function (context, ...args) {
-    const _this = this
+    const _this = this;
     function newFnc(...rest) {
-      _this.call(context, ...args, ...rest)
+      _this.call(context, ...args, ...rest);
     }
     if (_this.prototype) {
       // 防止传入的函数是箭头函数没有原型
       // 假如方法内容涉及原型链，需要绑定原方法的原型
-      newFnc.prototype = Object.create(_this.prototype)
+      newFnc.prototype = Object.create(_this.prototype);
     }
-    return newFnc
-  }
+    return newFnc;
+  };
   ```
 
 ## **原型和原型链**
@@ -853,19 +858,19 @@ class Child extends Parent {
 // 手写new
 function myNew(constructor, ...args) {
   // 构造函数类型合法判断
-  if (typeof constructor !== 'function') {
-    throw new Error('constructor must be a function')
+  if (typeof constructor !== "function") {
+    throw new Error("constructor must be a function");
   }
   // 新建空对象实例
-  let obj = new Object()
+  let obj = new Object();
   // 将构造函数的原型绑定到新创的对象实例上
-  obj.__proto__ = Object.create(constructor.prototype)
+  obj.__proto__ = Object.create(constructor.prototype);
   // 调用构造函数并判断返回值
-  let res = constructor.apply(obj, args)
-  let isObject = typeof res === 'object' && res !== null
-  let isFunction = typeof res === 'function'
+  let res = constructor.apply(obj, args);
+  let isObject = typeof res === "object" && res !== null;
+  let isFunction = typeof res === "function";
   // 如果有返回值且返回值是对象类型，那么就将它作为返回值，否则就返回之前新建的对象
-  return isObject || isFunction ? res : obj
+  return isObject || isFunction ? res : obj;
 }
 ```
 
@@ -888,9 +893,9 @@ function myNew(constructor, ...args) {
   1. `Symbol()` : `Symbol()`创建的对象都是唯一的，即使值相同也不会被覆盖，而且存放于`全局Symbol表`中
 
   ```js
-  let symbol1 = Symbol(1)
-  let symbol2 = Symbol(1)
-  console.log(symbol1 == symbol2) // false
+  let symbol1 = Symbol(1);
+  let symbol2 = Symbol(1);
+  console.log(symbol1 == symbol2); // false
   ```
 
   2. `Symbol.for(key)` : `Symbol.for(key)`并不会马上创建一个`Symbol对象`，而是先遍历`全局Symbol表`查找是否存在相同`key`的 Symbol 对象，如果有则返回该`Symbol对象`，没有则创建`Symbol(key)`
@@ -924,12 +929,13 @@ function myNew(constructor, ...args) {
 1. 通过`postMessage`和`onMessage`实现
 
 2. `MessageChannel`实现复杂通信
+
 ```js
 const channel = new MessageChannel();
 worker.postMessage({ port: channel.port1 }, [channel.port1]);
 
-channel.port2.onmessage = function(event) {
-  console.log('Received message from worker:', event.data);
+channel.port2.onmessage = function (event) {
+  console.log("Received message from worker:", event.data);
 };
 ```
 
@@ -938,52 +944,56 @@ channel.port2.onmessage = function(event) {
 1. 加标识
 
 2. `event.source`
+
 ```js
-window.addEventListener('message', function(event) {
+window.addEventListener("message", function (event) {
   if (event.source === null) {
-    console.log('Message from Web Worker:', event.data);
+    console.log("Message from Web Worker:", event.data);
   } else if (event.source === iframe.contentWindow) {
-    console.log('Message from iframe:', event.data);
+    console.log("Message from iframe:", event.data);
   }
 });
 ```
 
 3. 使用不同的监听器
+
 ```js
 // Web Worker监听器：
-worker.onmessage = function(event) {
-  console.log('Message from Web Worker:', event.data);
+worker.onmessage = function (event) {
+  console.log("Message from Web Worker:", event.data);
 };
 
 // ​iframe 监听器：
-window.addEventListener('message', function(event) {
+window.addEventListener("message", function (event) {
   if (event.source === iframe.contentWindow) {
-    console.log('Message from iframe:', event.data);
+    console.log("Message from iframe:", event.data);
   }
 });
 ```
 
 4. 通过`MessageChannel`区分
+
 ```js
 //Web Worker 使用 MessageChannel：
 const channel = new MessageChannel();
 worker.postMessage({ port: channel.port1 }, [channel.port1]);
 
-channel.port2.onmessage = function(event) {
-  console.log('Message from Web Worker:', event.data);
+channel.port2.onmessage = function (event) {
+  console.log("Message from Web Worker:", event.data);
 };
 
 // ​iframe 使用 postMessage：
-iframe.contentWindow.postMessage('Hello from iframe', '*');
+iframe.contentWindow.postMessage("Hello from iframe", "*");
 ```
 
-5. ​检查`event.origin`
+5. ​ 检查`event.origin`
+
 ```js
-window.addEventListener('message', function(event) {
-  if (event.origin === '') {
-    console.log('Message from Web Worker:', event.data);
-  } else if (event.origin === 'https://example.com') {
-    console.log('Message from iframe:', event.data);
+window.addEventListener("message", function (event) {
+  if (event.origin === "") {
+    console.log("Message from Web Worker:", event.data);
+  } else if (event.origin === "https://example.com") {
+    console.log("Message from iframe:", event.data);
   }
 });
 ```
@@ -1234,22 +1244,22 @@ backdrop-filter: saturate(50%) blur(4px);
 <!-- 方法1 getElementById('input') -->
 <input id="input" />
 <script>
-  const input = document.getElementById('input')
-  alert(input.value)
+  const input = document.getElementById("input");
+  alert(input.value);
 </script>
 
 <!-- 方法2 getElementByTagName('input') -->
 <input />
 <script>
-  const input = document.getElementByTagName('input')
-  alert(input.value)
+  const input = document.getElementByTagName("input");
+  alert(input.value);
 </script>
 
 <!-- 方法3 querySelector('#input') -->
 <input id="input" />
 <script>
-  const input = document.querySelector('#input')
-  alert(input.value)
+  const input = document.querySelector("#input");
+  alert(input.value);
 </script>
 
 <!-- 方法4 使用form + name获取input -->
@@ -1257,8 +1267,8 @@ backdrop-filter: saturate(50%) blur(4px);
   <input name="input" />
 </form>
 <script>
-  const value = myForm.input.value
-  alert(value)
+  const value = myForm.input.value;
+  alert(value);
 </script>
 ```
 
@@ -1391,10 +1401,7 @@ v-for="user in userList" v-if="shouldShowUserList"
 <input v-model="userName" />
 
 <!-- 原理 -->
-<input
-  :value="userName"
-  @input="userName = $event.target.value"
-/>
+<input :value="userName" @input="userName = $event.target.value" />
 ```
 
 ## **nextTick 的作用**
@@ -1424,40 +1431,40 @@ v-for="user in userList" v-if="shouldShowUserList"
   ```js
   // Vue3 EventBus
   class eventBus {
-    static obj
+    static obj;
     constructor(event) {
-      this.callbackId = 0
-      this.init()
+      this.callbackId = 0;
+      this.init();
     }
     init() {
       if (!eventBus.obj) {
-        eventBus.obj = {}
-        this.eventObj = eventBus.obj
-        return
+        eventBus.obj = {};
+        this.eventObj = eventBus.obj;
+        return;
       }
-      this.eventObj = eventBus.obj
+      this.eventObj = eventBus.obj;
     }
     $emit(fncName, callback) {
       if (!this.list[fncName]) {
-        this.list[fncName] = []
+        this.list[fncName] = [];
       }
-      this.list[fncName][this.callbackId] = callback
-      this.callbackId += 1
-      return this.callbackId
+      this.list[fncName][this.callbackId] = callback;
+      this.callbackId += 1;
+      return this.callbackId;
     }
 
     $on(fncName, ...args) {
-      this.list[fncName].forEach(fnc => {
-        fnc(...args)
-      })
+      this.list[fncName].forEach((fnc) => {
+        fnc(...args);
+      });
     }
     $off(fncName, callbackId) {
       if (this.list[fncName] && !callbackId) {
-        delete this.list[fncName]
+        delete this.list[fncName];
       } else if (this.list[fncName] && callbackId) {
-        delete this.list[fncName][callbackId]
+        delete this.list[fncName][callbackId];
         if (!Object.keys(this.list[fncName]).length) {
-          delete this.list[fncName]
+          delete this.list[fncName];
         }
       }
     }
@@ -1486,12 +1493,12 @@ v-for="user in userList" v-if="shouldShowUserList"
 >
 > <script>
 >   let myComponent1 = {
->     template: `<div>myComponent1</div>`
->   }
+>     template: `<div>myComponent1</div>`,
+>   };
 >   let myComponent2 = {
->     template: `<div>myComponent2</div>`
->   }
->   let activeComponentName = 'myComponent1'
+>     template: `<div>myComponent2</div>`,
+>   };
+>   let activeComponentName = "myComponent1";
 > </script>
 > ```
 
@@ -1567,9 +1574,9 @@ v-for="user in userList" v-if="shouldShowUserList"
 
   ```js
   // query可以配合path使用
-  router.push({ path: '/user', query: { name: 'hqh' } })
+  router.push({ path: "/user", query: { name: "hqh" } });
   // params只能配合name使用，如果配合path则会使params丢失
-  router.push({ name: '/user', query: { name: 'hqh' } })
+  router.push({ name: "/user", query: { name: "hqh" } });
   ```
 
   2. `使用` : `params`使用`route.params.name`获取，`query`使用`route.query.name`获取
@@ -1612,16 +1619,16 @@ v-for="user in userList" v-if="shouldShowUserList"
    >     return (
    >       _openBlock(),
    >       _createElementBlock(
-   >         'button',
+   >         "button",
    >         {
    >           onClick:
    >             _cache[0] ||
    >             (_cache[0] = (...args) =>
-   >               _ctx.handleClick && _ctx.handleClick(...args))
+   >               _ctx.handleClick && _ctx.handleClick(...args)),
    >         },
-   >         '按钮'
+   >         "按钮"
    >       )
-   >     )
+   >     );
    >   }
    > </script>
    > ```
@@ -1637,27 +1644,27 @@ v-for="user in userList" v-if="shouldShowUserList"
    > </div>
    >
    > <script>
-   >   const _hoisted_1 = { id: 'app' }
+   >   const _hoisted_1 = { id: "app" };
    >   const _hoisted_2 = /*#__PURE__*/ _createElementVNode(
-   >     'div',
+   >     "div",
    >     null,
-   >     '沐华',
+   >     "沐华",
    >     -1 /* 静态标记 */
-   >   )
+   >   );
    >
    >   export function render(_ctx, _cache, $props, $setup, $data, $options) {
    >     return (
    >       _openBlock(),
-   >       _createElementBlock('div', _hoisted_1, [
+   >       _createElementBlock("div", _hoisted_1, [
    >         _hoisted_2,
    >         _createElementVNode(
-   >           'p',
+   >           "p",
    >           null,
    >           _toDisplayString(_ctx.age),
    >           1 /* 表明为静态节点 */
-   >         )
+   >         ),
    >       ])
-   >     )
+   >     );
    >   }
    > </script>
    > ```
