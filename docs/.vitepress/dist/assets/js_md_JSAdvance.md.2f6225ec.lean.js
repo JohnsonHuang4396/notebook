@@ -1,1 +1,0 @@
-import{_ as s,c as n,o as a,N as l}from"./chunks/framework.9fe2e29c.js";const C=JSON.parse('{"title":"🚀 JS 手撕","description":"","frontmatter":{},"headers":[],"relativePath":"js/md/JSAdvance.md"}'),p={name:"js/md/JSAdvance.md"},o=l("",19),e=[o];function t(r,c,y,F,D,i){return a(),n("div",null,e)}const b=s(p,[["render",t]]);export{C as __pageData,b as default};
