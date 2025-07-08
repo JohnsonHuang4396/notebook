@@ -1,21 +1,21 @@
 {
   "name": "note-book",
   "version": "1.0.4",
+  "packageManager": "pnpm@10.12.4",
   "description": "个人文档",
-  "main": "index.ts",
-  "repository": "https://github.com/JohnsonHuang4396/notebook.git",
   "author": "JohnsonHuang4396 <1771032483@qq.com>",
   "license": "MIT",
-  "devDependencies": {
-    "release-it": "^19.0.3",
-    "sass": "^1.89.2",
-    "vitepress": "^1.0.1"
-  },
+  "repository": "https://github.com/JohnsonHuang4396/notebook.git",
+  "main": "index.ts",
   "scripts": {
     "dev": "vitepress dev docs",
     "build": "vitepress build docs",
-    "serve": "vitepress serve docs",
-    "release": "release-it"
+    "serve": "vitepress serve docs"
   },
-  "packageManager": "pnpm@10.12.4"
+  "devDependencies": {
+    "@antfu/eslint-config": "^4.16.2",
+    "eslint": "^9.30.1",
+    "sass": "^1.89.2",
+    "vitepress": "^1.6.3"
+  }
 }
