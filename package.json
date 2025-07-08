@@ -9,7 +9,7 @@
   "devDependencies": {
     "release-it": "^19.0.3",
     "sass": "^1.89.2",
-    "vitepress": "^1.6.3"
+    "vitepress": "^1.0.1"
   },
   "scripts": {
     "dev": "vitepress dev docs",
