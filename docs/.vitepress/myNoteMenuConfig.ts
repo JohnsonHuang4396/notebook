@@ -11,6 +11,7 @@ export default [
 
 export const myNoteNavConfig = [
   { text: '我的总结', link: '/my-review/' },
+  { text: '八股文', link: `${myNoteLink}/八股文` },
   { text: '我的笔记', link: `${myNoteLink}/my-note` },
   { text: '面经好文', link: `${myNoteLink}/good-article` },
 ]
