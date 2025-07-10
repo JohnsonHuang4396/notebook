@@ -692,7 +692,7 @@ graph TD
 
 #### 推荐解决方案
 
-:::success 最佳实践
+:::tip 最佳实践
 **预处理线程方案**: 接收方创建一个预处理线程，对接收到的数据包进行预处理，将粘连的包分开。
 
 **优势**:
@@ -1710,7 +1710,7 @@ flowchart TD
 
 # 前端技术基础
 
-## HTML && CSS
+## HTML
 
 ### HTML5 新特性与语义化
 
@@ -1912,7 +1912,7 @@ graph TD
 
 ##### 详细优势分析
 
-:::tip 开发与维护
+:::info 开发与维护
 1. **代码结构清晰**：标签名称直观表达内容用途
 2. **团队协作**：统一的语义理解，减少沟通成本
 3. **代码维护**：语义明确的标签更容易定位和修改
@@ -1925,14 +1925,14 @@ graph TD
 3. **移动友好**：语义化标签有助于响应式设计
 :::
 
-:::success SEO 优化
+:::info SEO 优化
 1. **搜索引擎理解**：爬虫能更好地理解页面结构和内容重要性
 2. **权重分配**：不同标签有不同的SEO权重（h1 > h2 > p）
 3. **结构化数据**：有助于生成富文本搜索结果
 4. **内容索引**：article、section 等标签帮助内容分类
 :::
 
-:::warning 可访问性
+:::info 可访问性
 1. **屏幕阅读器**：为视障用户提供更好的网页导航
 2. **键盘导航**：语义化标签支持更好的键盘操作
 3. **语音控制**：便于语音助手理解页面结构
@@ -1962,7 +1962,7 @@ flowchart TD
 ##### 错误示例 vs 正确示例
 
 ::: info
-== ❌ 错误示例
+❌ 错误示例
 ```html
 <!-- 过度使用 div，缺乏语义 -->
 <div class="header">
@@ -1981,7 +1981,7 @@ flowchart TD
 </div>
 ```
 
-== ✅ 正确示例
+✅ 正确示例
 ```html
 <!-- 使用语义化标签 -->
 <header>
@@ -2029,6 +2029,8 @@ flowchart TD
 
 > 📚 **延伸阅读**：[HTML5 语义化标签完整指南](https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element)
 
+
+## CSS
 
 ### CSS 选择器及优先级
 
@@ -2099,7 +2101,7 @@ graph TD
 ##### 组合选择器对比
 
 ::: info
-== 后代选择器（空格）
+后代选择器（空格）
 ```css
 /* 选择 div 内所有 p 元素（包括嵌套） */
 div p {
@@ -2108,7 +2110,7 @@ div p {
 ```
 **特点**：选择所有后代元素，包括子、孙及更深层级
 
-== 子选择器（>）
+子选择器（>）
 ```css
 /* 只选择 div 的直接子 p 元素 */
 div > p {
@@ -2117,7 +2119,7 @@ div > p {
 ```
 **特点**：只选择直接子元素，不包括孙级
 
-== 相邻兄弟选择器（+）
+相邻兄弟选择器（+）
 ```css
 /* 选择紧跟在 h1 后的第一个 p 元素 */
 h1 + p {
@@ -2126,7 +2128,7 @@ h1 + p {
 ```
 **特点**：选择紧邻的下一个兄弟元素
 
-== 通用兄弟选择器（~）
+通用兄弟选择器（~）
 ```css
 /* 选择 h1 后所有同级的 p 元素 */
 h1 ~ p {
@@ -2581,7 +2583,7 @@ graph TD
 #### 可视化示例
 
 ::: info
-== content-box（标准）
+content-box（标准）
 ```css
 .content-box {
     box-sizing: content-box; /* 默认值 */
@@ -2593,7 +2595,7 @@ graph TD
 }
 ```
 
-== border-box（IE模型）
+border-box（IE模型）
 ```css
 .border-box {
     box-sizing: border-box;
@@ -2847,8 +2849,7 @@ graph TD
 
 ##### 1. 清除浮动
 
-::: info
-== 问题现象
+::: info 问题现象
 ```html
 <div class="container">
     <div class="float-child">浮动元素</div>
@@ -2871,7 +2872,7 @@ graph TD
 }
 ```
 
-== BFC 解决方案
+BFC 解决方案
 ```css
 .container {
     border: 2px solid red;
@@ -2887,8 +2888,7 @@ graph TD
 
 ##### 2. 防止 margin 重叠
 
-::: info
-== 问题现象
+::: info 问题现象
 ```html
 <div class="box1">Box 1</div>
 <div class="box2">Box 2</div>
@@ -2925,8 +2925,7 @@ graph TD
 
 ##### 3. 阻止元素被浮动元素覆盖
 
-::: info
-== 问题现象
+::: info 问题现象
 ```html
 <div class="float-element">浮动元素</div>
 <div class="normal-element">普通元素被覆盖</div>
@@ -2946,7 +2945,7 @@ graph TD
 }
 ```
 
-== BFC 解决方案
+BFC 解决方案
 ```css
 .normal-element {
     background: blue;
@@ -3098,39 +3097,6 @@ function createsBFC(element) {
 4. **兼容性**：`display: flow-root` 在旧浏览器中不支持
 :::
 
-#### 实战练习
-
-```html
-<!-- 练习：创建一个包含浮动元素的卡片组件 -->
-<div class="card">
-    <img class="card-image" src="image.jpg" alt="Card Image">
-    <div class="card-content">
-        <h3>Card Title</h3>
-        <p>Card description content...</p>
-    </div>
-</div>
-```
-
-```css
-.card {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    overflow: hidden; /* 创建 BFC，包含浮动图片 */
-}
-
-.card-image {
-    float: left;
-    width: 100px;
-    height: 100px;
-    margin: 10px;
-}
-
-.card-content {
-    overflow: hidden; /* 创建 BFC，防止被图片覆盖 */
-    padding: 10px;
-}
-```
-
 > 📚 **延伸阅读**: [MDN - Block Formatting Context](https://developer.mozilla.org/zh-CN/docs/Web/Guide/CSS/Block_formatting_context)
 
 ### CSS 定位属性详解
@@ -3168,14 +3134,13 @@ graph TD
 
 ##### 1. Static（默认定位）
 
-::: info
-== 特性
+::: info 特性
 - **默认值**：所有元素的初始 position 值
 - **文档流**：元素保持在正常的文档流中
 - **偏移属性**：忽略 `top`、`right`、`bottom`、`left` 和 `z-index`
 - **空间占用**：正常占据文档流空间
 
-== 代码示例
+代码示例
 ```css
 .static-element {
     position: static; /* 默认值，可省略 */
@@ -3183,7 +3148,7 @@ graph TD
 }
 ```
 
-== 使用场景
+使用场景
 - 普通的页面布局元素
 - 重置其他定位回到默认状态
 - 大部分块级和内联元素
@@ -3191,14 +3156,13 @@ graph TD
 
 ##### 2. Relative（相对定位）
 
-::: info
-== 特性
+::: info 特性
 - **参考点**：元素的原始位置
 - **文档流**：元素仍占据原来的空间
 - **偏移属性**：`top`、`right`、`bottom`、`left` 生效
 - **层级**：可使用 `z-index` 控制层级
 
-== 代码示例
+码示例
 ```css
 .relative-element {
     position: relative;
@@ -3208,7 +3172,7 @@ graph TD
 }
 ```
 
-== 使用场景
+使用场景
 - 微调元素位置
 - 作为绝对定位子元素的参考点
 - 需要使用 z-index 的普通元素
@@ -3253,7 +3217,7 @@ graph TD
 - **滚动行为**：页面滚动时位置不变
 - **移动端注意**：某些移动浏览器中可能有兼容性问题
 
-== 代码示例
+代码示例
 ```css
 .fixed-header {
     position: fixed;
@@ -3371,7 +3335,7 @@ graph TD
 }
 ```
 
-== 负边距方法
+负边距方法
 ```css
 .absolute-margin {
     position: absolute;
@@ -3384,7 +3348,7 @@ graph TD
 }
 ```
 
-== inset 方法
+inset 方法
 ```css
 .absolute-inset {
     position: absolute;
@@ -4340,7 +4304,7 @@ window.addEventListener('resize', setRem);
 setRem();
 ```
 
-== Viewport 单位
+Viewport 单位
 
 **单位说明：**
 - `vw`：视口宽度的 1%
@@ -4366,7 +4330,7 @@ setRem();
 }
 ```
 
-== 百分比布局
+百分比布局
 
 ```css
 /* 流式布局 */
@@ -4433,7 +4397,7 @@ flowchart TD
 
 * 优点：没有破坏完美视口
 
-* 缺点：px 值转换 rem 太过于复杂(下面我们使用 less 来解决这个问题)
+* 缺点：px 值转换 rem 太过于复杂
 
 **viewport 适配的原理**
 
@@ -4465,7 +4429,6 @@ viewport 适配的优缺点
 * 建立伪类选择器清除浮动
 
 ```js
-
 //在 css 中添加:after 伪元素
 .parent:after{
     /* 设置添加子元素的内容是空 */
@@ -4551,21 +4514,17 @@ ES6 之前创建变量用的是 var,之后创建变量用的是 let/const
 
 **三者区别**：
 
-1. var 定义的变量，`没有块的概念，可以跨块访问`, 不能跨函数访问。let 定义的变量，只能在块作用域里访问，不能跨块访问，也不能跨函数访问。const 用来定义常量，使用时必须初始化(即必须赋值)，只能在块作用域里访问，且不能修改。
+1. var 定义的变量，`没有块的概念，可以跨块访问`, 不能跨函数访问。let 定义的变量，只能在块作用域里访问，不能跨块访问，也不能跨函数访问。const 用来定义常量，使用时必须初始化(即必须赋值)，只能在块作用域里访问，且不能修改
 
-2. var 可以`先使用，后声明`，因为存在变量提升；let 必须先声明后使用。
+2. var 可以`先使用，后声明`，因为存在变量提升；let 和 const 必须先声明后使用
 
-3. var 是允许在相同作用域内`重复声明同一个变量`的，而 let 与 const 不允许这一现象。
+3. var 是允许在相同作用域内`重复声明同一个变量`的，而 let 与 const 不允许这一现象
 
-4. 在全局上下文中，基于 let 声明的全局变量和全局对象 GO（window）没有任何关系 ;var 声明的变量会和 GO 有映射关系；
+4. 在全局上下文中，基于 let 和 const 声明的全局变量和全局对象没有任何关系 ;var 声明的变量会和全局对象有映射关系
 
-5. `会产生暂时性死区`：
+5. `会产生暂时性死区`
 
->暂时性死区是浏览器的 bug：检测一个未被声明的变量类型时，不会报错，会返回 undefined
->如：console.log(typeof a) //undefined
->而：console.log(typeof a)//未声明之前不能使用
->let a
-1. let /const/function 会把当前所在的大括号(除函数之外)作为一个全新的块级上下文，应用这个机制，在开发项目的时候，遇到循环事件绑定等类似的需求，无需再自己构建闭包来存储，只要基于 let 的块作用特征即可解决
+6. let /const/function 会把当前所在的大括号(除函数之外)作为一个全新的块级上下文，应用这个机制，在开发项目的时候，遇到循环事件绑定等类似的需求，无需再自己构建闭包来存储，只要基于 let 的块作用特征即可解决
 
 ### JS 垃圾回收机制
 
@@ -4580,17 +4539,21 @@ ES6 之前创建变量用的是 var,之后创建变量用的是 let/const
 
 （1）堆内存：fn = null【null：空指针对象】
 
-1. （2）栈内存：把上下文中，被外部占用的堆的占用取消即可。
+（2）栈内存：把上下文中，被外部占用的堆的占用取消即可。
 
-内存泄漏
+### 内存泄漏
 
-1. 在 JS 中，常见的内存泄露主要有 4 种,全局变量、闭包、DOM 元素的引用、定时器
+:::tip
+在 JS 中，常见的内存泄露主要有 4 种,全局变量、闭包、DOM 元素的引用、定时器
+:::
 
 ### 作用域和作用域链
 
 创建函数的时候，已经声明了当前函数的作用域==>`当前创建函数所处的上下文`。如果是在全局下创建的函数就是`[[scope]]:EC(G)`，函数执行的时候，形成一个全新的私有上下文 `EC(FN)`，供字符串代码执行(进栈执行)
 
-定义：简单来说作用域就是变量与函数的可访问范围，`由当前环境与上层环境的一系列变量对象组成`
+> 定义：简单来说作用域就是变量与函数的可访问范围，`由当前环境与上层环境的一系列变量对象组成`
+
+:::info
 
 1.全局作用域：代码在程序的任何地方都能被访问，window 对象的内置属性都拥有全局作用域。
 
@@ -4599,6 +4562,7 @@ ES6 之前创建变量用的是 var,之后创建变量用的是 let/const
 作用：作用域最大的用处就是`隔离变量`，不同作用域下同名变量不会有冲突。
 
 **作用域链参考链接**一般情况下，变量到 创建该变量 的函数的作用域中取值。但是如果在当前作用域中没有查到，就会向上级作用域去查，直到查到全局作用域，这么一个查找过程形成的链条就叫做作用域链。
+:::
 
 ### 闭包的两大作用：保存/保护
 
@@ -4617,35 +4581,36 @@ ES6 之前创建变量用的是 var,之后创建变量用的是 let/const
 
 * **闭包的特性**：
 
-1、内部函数可以访问定义他们外部函数的参数和变量。(作用域链的向上查找，把外围的作用域中的变量值存储在内存中而不是在函数调用完毕后销毁)设计私有的方法和变量，避免全局变量的污染。
+1. 内部函数可以访问定义他们外部函数的参数和变量。(作用域链的向上查找，把外围的作用域中的变量值存储在内存中而不是在函数调用完毕后销毁)设计私有的方法和变量，避免全局变量的污染。
 
-1.1.闭包是密闭的容器，，类似于 set、map 容器，存储数据的
+  - 1.1.闭包是密闭的容器，，类似于 set、map 容器，存储数据的
 
-   * 1.2.闭包是一个对象，存放数据的格式为 key-value 形式
+  - 1.2.闭包是一个对象，存放数据的格式为 key-value 形式
 
-   * 2、函数嵌套函数
+2. 函数嵌套函数
 
-   * 3、本质是将函数内部和外部连接起来。优点是可以读取函数内部的变量，让这些变量的值始终保存在内存中，不会在函数被调用之后自动清除
+3. 本质是将函数内部和外部连接起来。优点是可以读取函数内部的变量，让这些变量的值始终保存在内存中，不会在函数被调用之后自动清除
 
-* **闭包形成的条件**：
+**闭包形成的条件**：
 
-   * 函数的嵌套
+  * 函数的嵌套
 
-   * 内部函数引用外部函数的局部变量，延长外部函数的变量生命周期
+  * 内部函数引用外部函数的局部变量，延长外部函数的变量生命周期
 
-* **闭包的用途**：
+**闭包的用途**：
 
-   * 模仿块级作用域
+  * 模仿块级作用域
 
-   * 保护外部函数的变量 能够访问函数定义时所在的词法作用域(阻止其被回收)
+  * 保护外部函数的变量 能够访问函数定义时所在的词法作用域(阻止其被回收)
 
-   * 封装私有化变量
+  * 封装私有化变量
 
-   * 创建模块
+  * 创建模块
 
 **闭包应用场景**
 
-* 闭包的两个场景，闭包的两大作用：`保存/保护`。 在开发中, 其实我们随处可见闭包的身影, 大部分前端 JavaScript 代码都是"事件驱动"的,即一个事件绑定的回调方法; 发送 ajax 请求成功|失败的回调;setTimeout 的延时回调;或者一个函数内部返回另一个匿名函数,这些都是闭包的应用。
+* **闭包的两大作用**：`保存/保护`。 
+> 在开发中, 其实我们随处可见闭包的身影, 大部分前端 JavaScript 代码都是"事件驱动"的,即一个事件绑定的回调方法; 发送 ajax 请求成功|失败的回调; setTimeout 的延时回调; 或者一个函数内部返回另一个匿名函数,这些都是闭包的应用。
 
 * **闭包的优点**：延长局部变量的生命周期
 
@@ -4673,9 +4638,9 @@ ES6 之前创建变量用的是 var,之后创建变量用的是 let/const
 
 * 实例的_ proto_指向对应 class 的 prototype
 
-‌ **原型:** 在 JS 中，每当定义一个对象（函数也是对象）时，对象中都会包含一些预定义的属性。其中每个`函数对象`都有一个`prototype` 属性，这个属性指向函数的`原型对象`。
+‌**原型:** 在 JS 中，每当定义一个对象（函数也是对象）时，对象中都会包含一些预定义的属性。其中每个`函数对象`都有一个`prototype` 属性，这个属性指向函数的`原型对象`。
 
-原型链：函数的原型链对象 constructor 默认指向函数本身，原型对象除了有原型属性外，为了实现继承，还有一个原型链指针__proto__,该指针是指向上一层的原型对象，而上一层的原型对象的结构依然类似。因此可以利用__proto__一直指向 Object 的原型对象上，而 Object 原型对象用 Object.prototype.__ proto__ = null 表示原型链顶端。如此形成了 js 的原型链继承。同时所有的 js 对象都有 Object 的基本防范
+**原型链**：函数的原型链对象 constructor 默认指向函数本身，原型对象除了有原型属性外，为了实现继承，还有一个原型链指针__proto__,该指针是指向上一层的原型对象，而上一层的原型对象的结构依然类似。因此可以利用__proto__一直指向 Object 的原型对象上，而 Object 原型对象用 Object.prototype.__ proto__ = null 表示原型链顶端。如此形成了 js 的原型链继承。同时所有的 js 对象都有 Object 的基本防范
 
 **特点:**  `JavaScript`对象是通过引用来传递的，我们创建的每个新对象实体中并没有一份属于自己的原型副本。当我们修改原型时，与之相关的对象也会继承这一改变。
 
@@ -4691,9 +4656,11 @@ ES6 之前创建变量用的是 var,之后创建变量用的是 let/const
 
 ### EventLoop 事件循环
 
+:::info
 `JS`是单线程的，为了防止一个函数执行时间过长阻塞后面的代码，所以会先将同步代码压入执行栈中，依次执行，将异步代码推入异步队列，异步队列又分为宏任务队列和微任务队列，因为宏任务队列的执行时间较长，所以微任务队列要优先于宏任务队列。微任务队列的代表就是，`Promise.then`，`MutationObserver`，宏任务的话就是 `setImmediate setTimeout setInterval`
 
 JS 运行的环境。一般为浏览器或者 Node。 在浏览器环境中，有 JS 引擎线程和渲染线程，且两个线程互斥。Node 环境中，只有 JS 线程。 不同环境执行机制有差异，不同任务进入不同 Event Queue 队列。 当主程结束，先执行准备好微任务，然后再执行准备好的宏任务，一个轮询结束。
+:::
 
 #### 浏览器中的事件环（Event Loop)
 
@@ -4703,20 +4670,20 @@ JS 运行的环境。一般为浏览器或者 Node。 在浏览器环境中，�
 
 事件循环可以简单的描述为以下四个步骤:
 
-   * 函数入栈，当 Stack 中执行到异步任务的时候，就将他丢给 WebAPIs,接着执行同步任务,直到 Stack 为空；
+  * 函数入栈，当 Stack 中执行到异步任务的时候，就将他丢给 WebAPIs,接着执行同步任务,直到 Stack 为空；
 
-   * 此期间 WebAPIs 完成这个事件，把回调函数放入队列中等待执行（微任务放到微任务队列，宏任务放到宏任务队列）
+  * 此期间 WebAPIs 完成这个事件，把回调函数放入队列中等待执行（微任务放到微任务队列，宏任务放到宏任务队列）
 
-   * 执行栈为空时，Event Loop 把微任务队列执行清空；
+  * 执行栈为空时，Event Loop 把微任务队列执行清空；
 
-   * 微任务队列清空后，进入宏任务队列，取队列的第一项任务放入 Stack(栈）中执行，执行完成后，查看微任务队列是否有任务，有的话，清空微任务队列。重复 4，继续从宏任务中取任务执行，执行完成之后，继续清空微任务，如此反复循环，直至清空所有的任务。
+  * 微任务队列清空后，进入宏任务队列，取队列的第一项任务放入 Stack(栈）中执行，执行完成后，查看微任务队列是否有任务，有的话，清空微任务队列。重复 4，继续从宏任务中取任务执行，执行完成之后，继续清空微任务，如此反复循环，直至清空所有的任务。
 
 
 * 浏览器中的任务源(task):
 
-   * `宏任务(macrotask)`：宿主环境提供的，比如浏览器 ajax、setTimeout、setInterval、setTmmediate(只兼容 ie)、script、requestAnimationFrame、messageChannel、UI 渲染、一些浏览器 api
+  * `宏任务(macrotask)`：宿主环境提供的，比如浏览器 ajax、setTimeout、setInterval、setTmmediate(只兼容 ie)、script、requestAnimationFrame、messageChannel、UI 渲染、一些浏览器 api
 
-   * `微任务(microtask)`：语言本身提供的，比如 promise.thenthen、queueMicrotask(基于 then)、mutationObserver(浏览器提供)、messageChannel、mutationObersve
+  * `微任务(microtask)`：语言本身提供的，比如 promise.thenthen、queueMicrotask(基于 then)、mutationObserver(浏览器提供)、messageChannel、mutationObersve
 
 
 传送门 ☞ [# 宏任务和微任务](https://juejin.cn/post/7001881781125251086)
@@ -4741,16 +4708,15 @@ JS 运行的环境。一般为浏览器或者 Node。 在浏览器环境中，�
 
 ### setTimeout、Promise、Async/Await 的区别
 
-setTimeout
+**setTimeout**
 
-1. settimeout 的回调函数放到宏任务队列里，等到执行栈清空以后执行。
+> settimeout 的回调函数放到宏任务队列里，等到执行栈清空以后执行。
 
-Promise
+**Promise**
 
-Promise 本身是**同步的立即执行函数**， 当函数执行的时候，一旦遇到 await 就会先返回，等到触发的异步操作完成，再执行函数体内后面的语句。可以理解为，是让出了线程，跳出了 async 函数体。
+> Promise 本身是**同步的立即执行函数**， 当函数执行的时候，一旦遇到 await 就会先返回，等到触发的异步操作完成，再执行函数体内后面的语句。可以理解为，是让出了线程，跳出了 async 函数体。
 
 ```js
-
 console.log('script start')
 let promise1 = new Promise(function (resolve) {
     console.log('promise1')
@@ -4765,11 +4731,11 @@ setTimeout(function(){
 console.log('script end')
 // 输出顺序: script start->promise1->promise1 end->script end->promise2->settimeout
 ```
-async/await
-async 函数返回一个 Promise 对象，当函数执行的时候，一旦遇到 await 就会先返回，等到触发的异步操作完成，再执行函数体内后面的语句。可以理解为，是让出了线程，跳出了 async 函数体。
+
+**async/await**
+> async 函数返回一个 Promise 对象，当函数执行的时候，一旦遇到 await 就会先返回，等到触发的异步操作完成，再执行函数体内后面的语句。可以理解为，是让出了线程，跳出了 async 函数体。
 
 ```js
-
 async function async1(){
    console.log('async1 start');
     await async2();
@@ -4786,73 +4752,68 @@ console.log('script end')
 // 输出顺序：script start->async1 start->async2->script end->async1 end
 ```
 传送门 ☞ [# JavaScript Promise 专题](https://juejin.cn/post/6999651011304357925)
+
 ### Async/Await 如何通过同步的方式实现异步
 
-Async/Await 就是一个**自执行**的 generate 函数。利用 generate 函数的特性把异步的代码写成"同步"的形式,第一个请求的返回值作为后面一个请求的参数,其中每一个参数都是一个 promise 对象.
+> Async/Await 就是一个**自执行**的 generate 函数。利用 generate 函数的特性把异步的代码写成"同步"的形式,第一个请求的返回值作为后面一个请求的参数,其中每一个参数都是一个 promise 对象.
 
 ### 介绍节流防抖原理、区别以及应用
 
-`节流`：事件触发后，规定时间内，事件处理函数不能再次被调用。也就是说在规定的时间内，函数只能被调用一次，且是最先被触发调用的那次。
+**`节流`**：事件触发后，规定时间内，事件处理函数不能再次被调用。也就是说在规定的时间内，函数只能被调用一次，且是最先被触发调用的那次。
 
-`防抖`：多次触发事件，事件处理函数只能执行一次，并且是在触发操作结束时执行。也就是说，当一个事件被触发准备执行事件函数前，会等待一定的时间（这时间是码农自己去定义的，比如 1 秒），如果没有再次被触发，那么就执行，如果被触发了，那就本次作废，重新从新触发的时间开始计算，并再次等待 1 秒，直到能最终执行！
+**`防抖`**：多次触发事件，事件处理函数只能执行一次，并且是在触发操作结束时执行。也就是说，当一个事件被触发准备执行事件函数前，会等待一定的时间（这时间是码农自己去定义的，比如 1 秒），如果没有再次被触发，那么就执行，如果被触发了，那就本次作废，重新从新触发的时间开始计算，并再次等待 1 秒，直到能最终执行！
 
-`使用场景`：
+#### 使用场景：
 
-节流：滚动加载更多、搜索框搜的索联想功能、高频点击、表单重复提交……
+**节流**：滚动加载更多、搜索框搜的索联想功能、高频点击、表单重复提交……
 
-防抖：搜索框搜索输入，并在输入完以后自动搜索、手机号，邮箱验证输入检测、窗口大小 resize 变化后，再重新渲染。
+**防抖**：搜索框搜索输入，并在输入完以后自动搜索、手机号，邮箱验证输入检测、窗口大小 resize 变化后，再重新渲染。
 
 :::details **节流函数**
 ```js
 /**
- * 节流函数 一个函数执行一次后，只有大于设定的执行周期才会执行第二次。有个需要频繁触发的函数，出于优化性能的角度，在规定时间内，只让函数触发的第一次生效，后面的不生效。
- * @param fn 要被节流的函数
- * @param delay 规定的时间
- */
-function throttle(fn, delay) {
-    //记录上一次函数触发的时间
-    var lastTime = 0;
-    return function(){
-        //记录当前函数触发的时间
-        var nowTime = Date.now();
-        if(nowTime - lastTime > delay){
-            //修正 this 指向问题
-            fn.call(this);
-            //同步执行结束时间
-            lastTime = nowTime;
-        }
+ * @description 节流函数 一个函数执行一次后，只有大于设定的执行周期才会执行第二次。有个需要频繁触发的函数，出于优化性能的角度，在规定时间内，只让函数触发的第一次生效，后面的不生效。
+*/
+function throttle(fnc, delay) {
+  let timer = null;
+  return function () {
+    let _this = this,
+      args = arguments;
+    if (!timer) {
+      timer = setTimeout(() => {
+        fnc.call(_this, ...args);
+        timer = null;
+      }, delay);
     }
+  };
 }
-
-document.onscroll = throttle(function () {
-    console.log('scllor 事件被触发了' + Date.now());
-}, 200); 
 ```
 :::
 
 :::details **防抖函数** 
 ```js
 /**
- * 防抖函数  一个需要频繁触发的函数，在规定时间内，只让最后一次生效，前面的不生效
- * @param fn 要被节流的函数
- * @param delay 规定的时间
+ * @description 防抖的立即执行版本
  */
-function debounce(fn, delay) {
-    //记录上一次的延时器
-    var timer = null;
-    return function () {
-       //清除上一次的演示器
-        clearTimeout(timer);
-        //重新设置新的延时器
-        timer = setTimeout(()=>{
-            //修正 this 指向问题
-            fn.apply(this);
-        }, delay); 
+function debounce(fnc, delay, immediate) {
+  let timer = null;
+  return function () {
+    let args = arguments,
+      _this = this;
+    if (timer) clearTimeout(timer);
+    if (immediate) {
+      let callNow = !timer; // callNew立即执行的时机为timer=null时
+      timer = setTimeout(() => {
+        timer = null;
+      }, delay);
+      if (callNow) fnc.call(_this, ...args);
+    } else {
+      timer = setTimeout(() => {
+        fnc.call(_this, ...args);
+      }, delay);
     }
+  };
 }
-document.getElementById('btn').onclick = debounce(function () {
-    console.log('按钮被点击了' + Date.now());
-}, 1000);
 ```
 :::
 
@@ -6058,6 +6019,129 @@ Vuex 是一个专为 Vue 应用程序开发的状态管理模式。每一个 Vue
 2. Getter：在 store 中定义"getter"（可以认为是 store 的计算属性），
 
 就像计算属性一样，getter 的返回值会根据它的依赖被缓存起来， 且只有当它的依赖值发生了改变才会被重新计算 3. Mutation：是唯一更改 store 中状态的方法，且必须是同步函数 4. Action：用于提交 mutation，而不是直接变更状态，可以包含任意异步操作 5. Module：允许将单一的 Store 拆分为多个 store 且同时保存在单一的状态树中
+
+## Vite
+
+### Vite 的原理
+
+Vite 的原理是基于浏览器原生 ES 模块的能力，通过在开发时拦截请求，将模块转换为浏览器可以理解的格式，从而实现快速的开发体验。
+
+
+当然，下面我们来**详细分析**为什么 Vite 在开发模式下使用 esbuild，在生产模式下使用 Rollup，涵盖 **技术实现、设计理念、模块系统、插件架构、性能权衡、未来方向** 等多个维度。
+
+### Vite 为何在开发环境使用esbuild而在生产环境使用rollup
+
+#### ⚙️ 二、开发模式下使用 esbuild 的详细原因
+
+##### 🔥 1. 构建速度极快（主要动机）
+
+* `esbuild` 是用 **Go 语言**编写的原生应用，相比 JavaScript 写的打包器（如 Webpack、Rollup）快数十倍。
+* 其内部使用多线程并发优化（不像 Node 是单线程的）。
+
+▶ 示例：
+
+```ts
+// TypeScript -> JavaScript
+esbuild.transform(code, { loader: 'ts' }) // 几毫秒即可完成
+```
+
+##### 🧪 2. 开发环境只需语法转换，不需要打包
+
+* Vite 利用浏览器原生支持 **ES Module**，不再需要将全部依赖打成一个 bundle。
+* 每个 `.ts` / `.vue` / `.jsx` 文件在请求时由 Vite 拦截，并通过 esbuild 实时转换为 JS。
+
+▶ 本质上是“**按需编译 + 源码直送浏览器**”。
+
+##### ♻️ 3. 快速热更新（HMR）
+
+* 模块之间的依赖关系由浏览器维护，修改一个文件后只需编译并更新这个模块即可。
+* Vite 通过 `ws` 服务推送 HMR 信息，性能远优于 Webpack 的全量热更新。
+
+##### 📦 4. 开发场景只需要轻量插件和少量中间处理
+
+* esbuild 提供简单的插件系统，能满足开发时的基本需求。
+* 无需复杂的打包优化、tree-shaking、chunk 分析。
+
+---
+
+#### 🛠️ 三、生产模式下使用 Rollup 的详细原因
+
+##### 🎯 1. Rollup 是最成熟的 JS 打包器之一
+
+* 具有优秀的 **静态依赖分析能力**。
+* 支持模块合并（scope hoisting）和极致的 tree-shaking。
+
+##### 🪄 2. 支持完整的构建优化能力
+
+Rollup 比 esbuild 提供更强的生产级优化能力，包括：
+
+| 优化能力                 | Rollup 支持情况    |
+| -------------------- | -------------- |
+| Tree-shaking         | ✅ 极强（静态分析 AST） |
+| 代码分割（Code splitting） | ✅              |
+| 动态导入 (`import()`)    | ✅              |
+| Scope hoisting       | ✅              |
+| Chunk 合并策略           | ✅              |
+| 多入口打包                | ✅              |
+
+##### 🧱 3. 插件生态庞大，支持复杂需求
+
+* Rollup 插件数量远超 esbuild，支持如 `@rollup/plugin-commonjs`、`@rollup/plugin-babel`、`rollup-plugin-visualizer` 等。
+* 可配合各种工具链做 SSR、legacy 构建、多目标输出等高级构建策略。
+
+##### 🧩 4. 支持灵活的输出格式
+
+生产构建经常要求输出为：
+
+* ESM：现代浏览器用
+* IIFE/UMD：供 CDN 加载
+* CJS：Node 使用
+
+Rollup 支持输出多个格式，且配置精细，esbuild 相对就较弱。
+
+---
+
+#### 🔄 四、Vite 的构建流程拆解（对比）
+
+| 阶段   | 技术               | 作用                 | 特点           |
+| ---- | ---------------- | ------------------ | ------------ |
+| 开发模式 | esbuild + 原生 ESM | 实时转译、模块按需加载        | 快速响应、HMR 性能强 |
+| 生产模式 | Rollup           | 静态分析打包、输出优化 bundle | 插件生态丰富、产出最优  |
+
+---
+
+#### 🧠 五、Vite 为什么不在生产也用 esbuild？
+
+虽然 esbuild 也有打包功能，但目前它在**构建输出能力和插件生态**方面仍有局限：
+
+| 能力           | esbuild   | Rollup   |
+| ------------ | --------- | -------- |
+| Tree-shaking | 基本支持      | 完善       |
+| 代码分割         | 基础支持      | 灵活强大     |
+| 插件生态         | 少量插件，功能简单 | 丰富全面     |
+| 输出格式         | 限制较多      | 多格式，灵活控制 |
+| Chunk 策略     | 简单粗暴      | 可精细配置    |
+
+👉 因此，**Vite 不使用 esbuild 打包生产**，而是将其用作“**开发时的编译器**”，构建交给更强大的 Rollup。
+
+---
+
+#### 🚀 六、未来趋势与演进方向
+
+* Vite 官方也在推动 Rollup 和 esbuild 更深融合。
+* esbuild 插件生态正在发展，但预计短期内不会取代 Rollup 的地位。
+* esbuild 可能未来会更适合构建小型库项目，而大型工程仍以 Rollup 为主。
+
+---
+
+#### ✅ 总结
+
+| 模式   | 使用的构建器      | 设计目标         | 技术理由                |
+| ---- | ----------- | ------------ | ------------------- |
+| 开发模式 | **esbuild** | 快速启动、热更新、零打包 | 极速转译 + 浏览器 ESM      |
+| 生产模式 | **Rollup**  | 高质量产出、优化打包   | Tree-shaking + 插件生态 |
+
+---
 
 
 ## webpack
