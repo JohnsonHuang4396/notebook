@@ -2747,6 +2747,15 @@ input, textarea, select {
 
 > 语法：`box-sizing: content-box | border-box | inherit`
 
+### 0.5px的线
+```css
+.line-half {
+  height: 1px;
+  transform: scaleY(0.5);
+  transform-origin: 50% 100%; // 设置形变开始的位置，这里设为上边的中点
+}
+```
+
 ### CSS 盒子模型
 
 CSS 盒子模型本质上是一个盒子，它包括：边距，边框，填充和实际内容。CSS 中的盒子模型包括 IE 盒子模型和标准的 W3C 盒子模型。
