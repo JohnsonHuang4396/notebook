@@ -373,7 +373,7 @@ graph TD
 3. **传递回调函数名作为参数**
 4. **定义回调函数接收数据**
 
-```javascript
+```js
 // 1. 动态创建 script 标签
 const script = document.createElement('script');
 
@@ -403,7 +403,7 @@ Cross-Origin Resource Sharing，通过服务器设置 `Access-Control-Allow-Orig
 :::
 
 **服务器端设置：**
-```javascript
+```js
 // Express.js 示例
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
@@ -419,9 +419,10 @@ app.use((req, res, next) => {
 目前最常用的方式，通过代理服务器转发请求，避免浏览器的同源策略限制。
 :::
 
-```javascript
+:::details webpack 开发环境配置
+```js
 // webpack 开发环境配置
-module.exports = {
+module.exports =  {
     devServer: {
         proxy: {
             '/api': {
@@ -435,6 +436,26 @@ module.exports = {
     }
 }
 ```
+:::
+
+:::details Vite 开发环境配置
+```js
+// Vite 开发环境配置
+export default defineConfig({
+    server: {
+        proxy: {
+            '/api': {
+                target: 'http://localhost:3000',
+                changeOrigin: true,
+                pathRewrite: {
+                    '^/api': ''
+                }
+            }
+        }
+    }
+})
+```
+:::
 
 #### 4. 其他方案
 
@@ -3396,6 +3417,7 @@ flowchart TD
 
 ##### 模态框居中
 
+:::details 模态框居中
 ```css
 .modal-overlay {
     position: fixed;
@@ -3419,9 +3441,10 @@ flowchart TD
     overflow: auto;
 }
 ```
+:::
 
 ##### 卡片居中布局
-
+:::details 卡片居中布局
 ```css
 .card-container {
     display: grid;
@@ -3439,6 +3462,7 @@ flowchart TD
     padding: 24px;
 }
 ```
+:::
 
 #### 最佳实践
 
@@ -3717,6 +3741,7 @@ graph TD
 
 **记忆口诀：盒子宽高均为零，三面边框皆透明。**
 
+:::details 基础三角形
 ```css
 /* 向上的三角形 */
 .triangle-up {
@@ -3754,9 +3779,11 @@ graph TD
     border-left: 100px solid #ff0;
 }
 ```
+:::
 
 ##### 使用伪元素实现
 
+:::details 使用伪元素实现
 ```css
 /*记忆口诀：盒子宽高均为零，三面边框皆透明。 */
 div:after{
@@ -3770,11 +3797,13 @@ div:after{
     border-bottom: 100px solid transparent;
 }
 ```
+:::
 
 #### 不同类型的三角形
 
 ##### 等腰三角形
 
+:::details 等腰三角形
 ```css
 .isosceles-triangle {
     width: 0;
@@ -3784,9 +3813,11 @@ div:after{
     border-bottom: 80px solid #007bff;
 }
 ```
+:::
 
 ##### 直角三角形
 
+:::details 直角三角形
 ```css
 /* 左上角直角三角形 */
 .right-triangle-topleft {
@@ -3804,9 +3835,11 @@ div:after{
     border-left: 100px solid transparent;
 }
 ```
+:::
 
 ##### 等边三角形
 
+:::details 等边三角形
 ```css
 .equilateral-triangle {
     width: 0;
@@ -3816,9 +3849,11 @@ div:after{
     border-bottom: 86.6px solid #ffc107; /* 50 * √3 ≈ 86.6 */
 }
 ```
+:::
 
 #### 现代 clip-path 方法
 
+:::details 现代 clip-path 方法
 ```css
 /* 使用 clip-path 创建三角形 */
 .triangle-clip {
@@ -3844,11 +3879,12 @@ div:after{
     clip-path: polygon(0% 0%, 100% 0%, 100% 75%, 75% 75%, 75% 100%, 50% 75%, 0% 75%);
 }
 ```
-
+:::
 #### 实用组件示例
 
 ##### 工具提示（Tooltip）
 
+:::details 工具提示（Tooltip）
 ```css
 .tooltip {
     position: relative;
@@ -3887,9 +3923,10 @@ div:after{
     border-bottom: 5px solid #333;
 }
 ```
-
+:::
 ##### 面包屑导航箭头
 
+:::details 面包屑导航箭头
 ```css
 .breadcrumb-item {
     display: inline-block;
@@ -3920,9 +3957,10 @@ div:after{
     border-left-color: #007bff;
 }
 ```
-
+:::
 ##### 下拉菜单箭头
 
+:::details 下拉菜单箭头
 ```css
 .dropdown {
     position: relative;
@@ -3971,9 +4009,10 @@ div:after{
     display: block;
 }
 ```
-
+:::
 #### 三角形动画效果
 
+:::details 三角形动画效果
 ```css
 /* 旋转动画 */
 .triangle-rotate {
@@ -4007,7 +4046,7 @@ div:after{
     transform: scale(1.1);
 }
 ```
-
+:::
 #### 方法选择指南
 
 ```mermaid
@@ -4116,6 +4155,7 @@ graph TB
 
 == 实战案例
 
+:::details 圣杯布局实现
 **圣杯布局实现：**
 
 ```css
@@ -4144,7 +4184,9 @@ graph TB
   padding: 20px;
 }
 ```
+:::
 
+:::details 响应式导航栏
 **响应式导航栏：**
 
 ```css
@@ -4171,7 +4213,6 @@ graph TB
   }
 }
 ```
-
 :::
 
 #### 2. CSS Grid 网格布局
@@ -4180,6 +4221,7 @@ graph TB
 Grid 是最强大的 CSS 布局系统，适合复杂的二维布局。与 Flexbox 配合使用可以解决几乎所有布局需求。
 :::
 
+:::details 基础网格布局
 ```css
 /* 基础网格布局 */
 .grid-container {
@@ -4207,6 +4249,7 @@ Grid 是最强大的 CSS 布局系统，适合复杂的二维布局。与 Flexbo
 .aside { grid-area: aside; }
 .footer { grid-area: footer; }
 ```
+:::
 
 #### 3. 浮动布局
 
@@ -4223,6 +4266,8 @@ Grid 是最强大的 CSS 布局系统，适合复杂的二维布局。与 Flexbo
 | 简单易懂 | 需要清除浮动 |
 |  | 布局复杂度高 |
 
+
+:::details 传统三栏布局
 ```css
 /* 传统三栏布局 */
 .float-layout {
@@ -4253,6 +4298,7 @@ Grid 是最强大的 CSS 布局系统，适合复杂的二维布局。与 Flexbo
   clear: both;
 }
 ```
+:::
 
 #### 4. 响应式单位对比
 
@@ -4403,21 +4449,22 @@ viewport 适配的优缺点
 
 * 添加额外标签
 
-```plain
-html
+```html
+<html>
 
 <div class="parent">
     //添加额外标签并且添加 clear 属性
     <div style="clear:both"></div>
     //也可以加一个 br 标签
 </div>
+</html>
 ```
+
 * 父级添加 overflow 属性，或者设置高度
 
 * 建立伪类选择器清除浮动
 
-```plain
-js
+```js
 
 //在 css 中添加:after 伪元素
 .parent:after{
@@ -4450,8 +4497,7 @@ js
 
 #### 1.typeof
 
-```plain
-js
+```js
 
 console.log(typeof 1);               // number
 console.log(typeof true);            // boolean
@@ -4470,8 +4516,7 @@ console.log(typeof undefined);       // undefined
 
 #### 2.instanceof
 
-```plain
-js
+```js
 
 console.log(1 instanceof Number);                    // false
 console.log(true instanceof Boolean);                // false 
@@ -4485,8 +4530,7 @@ console.log({} instanceof Object);                   // true
 
 #### 3.Object.prototype.toString.call()
 
-```plain
-js
+```js
 
 var toString = Object.prototype.toString;
 console.log(toString.call(1));                      //[object Number]
@@ -4705,8 +4749,7 @@ Promise
 
 Promise 本身是**同步的立即执行函数**， 当函数执行的时候，一旦遇到 await 就会先返回，等到触发的异步操作完成，再执行函数体内后面的语句。可以理解为，是让出了线程，跳出了 async 函数体。
 
-```plain
-js
+```js
 
 console.log('script start')
 let promise1 = new Promise(function (resolve) {
@@ -4725,8 +4768,7 @@ console.log('script end')
 async/await
 async 函数返回一个 Promise 对象，当函数执行的时候，一旦遇到 await 就会先返回，等到触发的异步操作完成，再执行函数体内后面的语句。可以理解为，是让出了线程，跳出了 async 函数体。
 
-```plain
-js
+```js
 
 async function async1(){
    console.log('async1 start');
@@ -4760,9 +4802,8 @@ Async/Await 就是一个**自执行**的 generate 函数。利用 generate 函�
 
 防抖：搜索框搜索输入，并在输入完以后自动搜索、手机号，邮箱验证输入检测、窗口大小 resize 变化后，再重新渲染。
 
-```
-js
-
+:::details **节流函数**
+```js
 /**
  * 节流函数 一个函数执行一次后，只有大于设定的执行周期才会执行第二次。有个需要频繁触发的函数，出于优化性能的角度，在规定时间内，只让函数触发的第一次生效，后面的不生效。
  * @param fn 要被节流的函数
@@ -4786,7 +4827,11 @@ function throttle(fn, delay) {
 document.onscroll = throttle(function () {
     console.log('scllor 事件被触发了' + Date.now());
 }, 200); 
+```
+:::
 
+:::details **防抖函数** 
+```js
 /**
  * 防抖函数  一个需要频繁触发的函数，在规定时间内，只让最后一次生效，前面的不生效
  * @param fn 要被节流的函数
@@ -4809,6 +4854,7 @@ document.getElementById('btn').onclick = debounce(function () {
     console.log('按钮被点击了' + Date.now());
 }, 1000);
 ```
+:::
 
 ## Vue
 
