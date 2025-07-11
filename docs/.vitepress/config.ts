@@ -1,16 +1,18 @@
 import { sidebar } from "./basicMenuConfig";
 import { nav } from "./basicMenuConfig";
+import { defineConfig } from "vitepress";
 
-export default {
+export default defineConfig({
   title: "my notebook",
   base: "/notebook",
-  description: "第一个vitepress",
+  description: "INeedAGodDamnGUN's notebook",
   lang: "zh_CN",
   lastUpdated: true,
   themeConfig: {
     siteTitle: "INeedAGodDamnGUN",
     logo: "/imgs/gun.png",
     outlineTitle: "当前页面",
+    outline: "deep",
     search: {
       provider: "local",
     },
@@ -35,4 +37,4 @@ export default {
   markdown: {
     lineNumbers: true,
   },
-};
+});

@@ -1,7 +1,8 @@
 {
   "name": "note-book",
+  "type": "module",
   "version": "1.0.4",
-  "packageManager": "pnpm@10.12.4",
+  "packageManager": "pnpm@10.13.0",
   "description": "个人文档",
   "author": "JohnsonHuang4396 <1771032483@qq.com>",
   "license": "MIT",
