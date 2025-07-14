@@ -2915,7 +2915,7 @@ BFC 解决方案
 /* 实际间距只有 30px，不是 50px */
 ```
 
-== BFC 解决方案
+BFC 解决方案
 ```html
 <div class="box1">Box 1</div>
 <div class="bfc-wrapper">
@@ -3330,7 +3330,7 @@ graph TD
 
 #### 定位实战案例
 
-##### 居中定位技巧
+:::tip **居中定位技巧**
 
 ```css
 /* 方法1：使用 transform */
@@ -4091,9 +4091,7 @@ graph TB
 
 #### 1. Flexbox 弹性布局
 
-:::tabs
-
-== 基础概念
+**基础概念**
 
 **Flexbox** 是 CSS3 引入的一维布局方法，主要解决传统布局方案的痛点，如垂直居中、等高列等问题。
 
@@ -4103,7 +4101,7 @@ graph TB
 - **弹性容器(Flex Container)**：设置了 `display: flex` 的父元素
 - **弹性项目(Flex Item)**：弹性容器的直接子元素
 
-== 容器属性
+**容器属性**
 
 | 属性 | 值 | 作用 |
 |------|---|------|
@@ -4114,7 +4112,7 @@ graph TB
 | `align-items` | `stretch` \| `flex-start` \| `flex-end` \| `center` \| `baseline` | 交叉轴对齐方式 |
 | `align-content` | 同上 | 多行在交叉轴上的对齐方式 |
 
-== 项目属性
+**项目属性**
 
 | 属性 | 默认值 | 作用 |
 |------|-------|------|
@@ -4125,36 +4123,102 @@ graph TB
 | `flex` | `0 1 auto` | 上述三个属性的简写 |
 | `align-self` | `auto` | 单个项目的对齐方式，可覆盖 `align-items` |
 
-== 实战案例
+**实战案例**
 
 :::details 圣杯布局实现
-**圣杯布局实现：**
-
+**flex：**
 ```css
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 .container {
+  width: 100%;
+  height: 100%;
   display: flex;
+  flex-direction: column;
+}
+
+header,
+footer {
+  width: 100%;
+  color: white;
+}
+
+header {
+  background: red;
+}
+
+footer {
+  background: blue;
+}
+
+main {
+  width: 100%;
+  flex: 1 0 0;
+  overflow: hidden;
+  display: flex;
+
+  aside {
+    flex: 0 0 200px;
+    background: green;
+  }
+
+  section {
+    flex: 1 0 0;
+  }
+}
+```
+
+**grid：**
+```css
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto 1fr auto;
+  grid-gap: 20px;
   min-height: 100vh;
 }
 
-.header, .footer {
-  flex: 0 0 auto; /* 不放大不缩小，尺寸为内容大小 */
-  width: 100%;
+/* 网格区域命名 */
+.layout {
+  display: grid;
+  grid-template-areas:
+    "header header header"
+    "sidebar main aside"
+    "footer footer footer";
+  grid-template-columns: 200px 1fr 150px;
+  grid-template-rows: auto 1fr auto;
 }
 
-.main {
-  display: flex;
-  flex: 1; /* 占据剩余空间 */
+.header {
+  grid-area: header;
 }
-
 .sidebar {
-  flex: 0 0 200px; /* 固定宽度 */
-  background: #f0f0f0;
+  grid-area: sidebar;
+}
+.main {
+  grid-area: main;
+}
+.aside {
+  grid-area: aside;
+}
+.footer {
+  grid-area: footer;
 }
 
-.content {
-  flex: 1; /* 占据剩余空间 */
-  padding: 20px;
-}
 ```
 :::
 
@@ -4189,11 +4253,11 @@ graph TB
 
 #### 2. CSS Grid 网格布局
 
-:::tip 现代布局首选
+:::info 现代布局首选
 Grid 是最强大的 CSS 布局系统，适合复杂的二维布局。与 Flexbox 配合使用可以解决几乎所有布局需求。
 :::
 
-:::details 基础网格布局
+:::details **基础网格布局**
 ```css
 /* 基础网格布局 */
 .grid-container {
@@ -4274,9 +4338,9 @@ Grid 是最强大的 CSS 布局系统，适合复杂的二维布局。与 Flexbo
 
 #### 4. 响应式单位对比
 
-:::tabs
+:::info 
 
-== Rem 布局
+1. **Rem 布局**
 
 **原理：** 相对于根元素 `html` 的 `font-size` 计算
 
@@ -4312,7 +4376,7 @@ window.addEventListener('resize', setRem);
 setRem();
 ```
 
-Viewport 单位
+2. **Viewport 单位**
 
 **单位说明：**
 - `vw`：视口宽度的 1%
@@ -4338,7 +4402,7 @@ Viewport 单位
 }
 ```
 
-百分比布局
+3. **百分比布局**
 
 ```css
 /* 流式布局 */
