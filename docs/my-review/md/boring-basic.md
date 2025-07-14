@@ -4965,7 +4965,9 @@ Vue 是一个典型的 MVVM 框架，模型（Model）只是普通的 javascript
 
 **computed 计算属性** 属性的结果会被`缓存`，当 `computed`中的函数所依赖的属性没有发生改变的时候，那么调用当前函数的时候结果会从缓存中读取。除非依赖的响应式属性变化时才会重新计算，主要当做属性来使用 `computed`中的函数必须用 `return`返回最终的结果 `computed`更高效，优先使用。`data 不改变，computed 不更新。`
 
-**使用场景** `computed`：当一个属性受多个属性影响的时候使用，例：购物车商品结算功能 `watch`：当一条数据影响多条数据的时候使用，例：搜索数据
+**使用场景** 
+> `computed`：当一个属性受多个属性影响的时候使用，例：购物车商品结算功能 
+> `watch`：当一条数据影响多条数据的时候使用，例：搜索数据
 
 #### `computed 和 watch 实现原理`
 
@@ -5052,6 +5054,8 @@ class Watcher {
 }
 ```
 :::
+
+
 
 **缓存机制关键点：**
 1. `dirty` 标志位：当依赖数据变化时，`dirty` 设为 `true`
@@ -5192,35 +5196,42 @@ function parsePath(path) {
 
 ```js
 // 深度监听的实现
-function traverse(val) {
-  _traverse(val, seenObjects)
-  seenObjects.clear()
-}
+export function traverse(
+  value: unknown,
+  depth: number = Infinity,
+  seen?: Set<unknown>,
+): unknown {
+  if (depth <= 0 || !isObject(value) || (value as any)[ReactiveFlags.SKIP]) {
+    return value
+  }
 
-function _traverse(val, seen) {
-  let i, keys
-  const isA = Array.isArray(val)
-  
-  if ((!isA && !isObject(val)) || Object.isFrozen(val) || val instanceof VNode) {
-    return
+  seen = seen || new Set()
+  if (seen.has(value)) {
+    return value
   }
-  
-  if (val.__ob__) {
-    const depId = val.__ob__.dep.id
-    if (seen.has(depId)) {
-      return // 避免循环引用
+  seen.add(value)
+  depth--
+  if (isRef(value)) {
+    traverse(value.value, depth, seen)
+  } else if (isArray(value)) {
+    for (let i = 0; i < value.length; i++) {
+      traverse(value[i], depth, seen)
     }
-    seen.add(depId)
+  } else if (isSet(value) || isMap(value)) {
+    value.forEach((v: any) => {
+      traverse(v, depth, seen)
+    })
+  } else if (isPlainObject(value)) {
+    for (const key in value) {
+      traverse(value[key], depth, seen)
+    }
+    for (const key of Object.getOwnPropertySymbols(value)) {
+      if (Object.prototype.propertyIsEnumerable.call(value, key)) {
+        traverse(value[key as any], depth, seen)
+      }
+    }
   }
-  
-  if (isA) {
-    i = val.length
-    while (i--) _traverse(val[i], seen) // 递归遍历数组
-  } else {
-    keys = Object.keys(val)
-    i = keys.length
-    while (i--) _traverse(val[keys[i]], seen) // 递归遍历对象属性
-  }
+  return value
 }
 ```
 :::
@@ -5231,48 +5242,214 @@ function _traverse(val, seen) {
 
 ```js
 // packages/reactivity/src/computed.ts
-export function computed(getterOrOptions) {
-  const onlyGetter = isFunction(getterOrOptions)
-  const getter = onlyGetter ? getterOrOptions : getterOrOptions.get
-  const setter = onlyGetter ? NOOP : getterOrOptions.set
-  
-  const cRef = new ComputedRefImpl(getter, setter, onlyGetter || !setter)
-  return cRef
-}
-
 class ComputedRefImpl {
-  private _value: T
-  private _dirty = true // 缓存标志
-  private _effect: ReactiveEffect
+  private _value!: T
+  private _dirty = true // 缓存标志，用于判断是否需要重新计算
+  private _effect: ReactiveEffect<T>
+  private readonly [ReactiveFlags.IS_REACTIVE] = false
+  private readonly [ReactiveFlags.IS_READONLY]: boolean
   
-  constructor(getter, setter, isReadonly) {
-    // 使用ReactiveEffect替代Watcher
+  constructor(
+    getter: ComputedGetter<T>,
+    private readonly _setter: ComputedSetter<T>,
+    isReadonly: boolean,
+    isSSR: boolean
+  ) {
+    // 创建副作用函数，使用ReactiveEffect替代Vue2的Watcher
     this._effect = new ReactiveEffect(getter, () => {
+      // 调度器：当依赖发生变化时触发
       if (!this._dirty) {
         this._dirty = true
-        trigger(this, TriggerOpTypes.SET, 'value') // 触发依赖更新
+        // 触发computed自身的依赖更新
+        trigger(this, TriggerOpTypes.SET, 'value')
       }
     })
     this._effect.computed = this
+    this._effect.active = this._cacheable = !isSSR
+    this[ReactiveFlags.IS_READONLY] = isReadonly
   }
   
   get value() {
-    // 收集依赖
-    track(this, TrackOpTypes.GET, 'value')
+    // 如果computed被其他响应式对象访问，需要建立依赖关系
+    const self = toRaw(this)
+    // 收集computed作为依赖
+    track(self, TrackOpTypes.GET, 'value')
     
-    if (this._dirty) {
-      this._dirty = false
-      this._value = this._effect.run() // 重新计算
+    // 如果数据脏了或者不可缓存，重新计算
+    if (self._dirty || !self._cacheable) {
+      self._dirty = false
+      // 执行getter函数，计算新值
+      self._value = self._effect.run()!
     }
-    return this._value
+    return self._value
   }
   
-  set value(newValue) {
+  set value(newValue: T) {
     this._setter(newValue)
   }
 }
+
+// computed函数的完整实现
+export function computed<T>(
+  getter: ComputedGetter<T>,
+  debugOptions?: DebuggerOptions
+): ComputedRef<T>
+export function computed<T>(
+  options: WritableComputedOptions<T>,
+  debugOptions?: DebuggerOptions
+): WritableComputedRef<T>
+export function computed<T>(
+  getterOrOptions: ComputedGetter<T> | WritableComputedOptions<T>,
+  debugOptions?: DebuggerOptions,
+  isSSR = false
+) {
+  let getter: ComputedGetter<T>
+  let setter: ComputedSetter<T>
+  
+  // 处理参数：支持函数形式和对象形式
+  const onlyGetter = isFunction(getterOrOptions)
+  if (onlyGetter) {
+    getter = getterOrOptions
+    setter = __DEV__
+      ? () => {
+          console.warn('Write operation failed: computed value is readonly')
+        }
+      : NOOP
+  } else {
+    getter = getterOrOptions.get
+    setter = getterOrOptions.set
+  }
+  
+  // 创建computed实例
+  const cRef = new ComputedRefImpl(
+    getter,
+    setter,
+    onlyGetter || !setter,
+    isSSR
+  )
+  
+  // 开发环境下的调试支持
+  if (__DEV__ && debugOptions && !isSSR) {
+    cRef.effect.onTrack = debugOptions.onTrack
+    cRef.effect.onTrigger = debugOptions.onTrigger
+  }
+  
+  return cRef as any
+}
+
+// 相关类型定义
+export type ComputedGetter<T> = (...args: any[]) => T
+export type ComputedSetter<T> = (v: T) => void
+
+export interface WritableComputedOptions<T> {
+  get: ComputedGetter<T>
+  set: ComputedSetter<T>
+}
+
+export interface ComputedRef<T = any> extends WritableComputedRef<T> {
+  readonly value: T
+  [ComputedRefSymbol]: true
+}
+
+export interface WritableComputedRef<T> extends Ref<T> {
+  readonly effect: ReactiveEffect<T>
+}
+
+// 使用示例和详细说明
 ```
 :::
+
+::: details **Vue3 computed 核心特性分析：**
+
+**1. 懒计算（Lazy Evaluation）**
+```js
+const count = ref(1)
+const doubleCount = computed(() => {
+  console.log('computed执行') // 只有访问时才执行
+  return count.value * 2
+})
+
+// 此时computed函数还未执行
+console.log('还未访问computed')
+
+// 访问时才执行getter
+console.log(doubleCount.value) // 输出: computed执行 \n 2
+```
+
+**2. 缓存机制**
+```js
+const count = ref(1)
+const doubleCount = computed(() => {
+  console.log('计算执行')
+  return count.value * 2
+})
+
+// 第一次访问，执行计算
+console.log(doubleCount.value) // 输出: 计算执行 \n 2
+
+// 第二次访问，使用缓存
+console.log(doubleCount.value) // 输出: 2 (不会再次计算)
+
+// 只有依赖变化，才重新计算
+count.value = 2
+console.log(doubleCount.value) // 输出: 计算执行 \n 4
+```
+
+**3. 依赖收集机制**
+```js
+const state = reactive({
+  firstName: 'John',
+  lastName: 'Doe'
+})
+
+const fullName = computed(() => {
+  // 访问firstName和lastName时自动收集依赖
+  return `${state.firstName} ${state.lastName}`
+})
+
+// 当firstName或lastName变化时，computed会自动重新计算
+state.firstName = 'Jane' // 触发fullName重新计算
+```
+
+**4. 可写computed**
+```js
+const firstName = ref('John')
+const lastName = ref('Doe')
+
+const fullName = computed({
+  get() {
+    return firstName.value + ' ' + lastName.value
+  },
+  set(newValue) {
+    [firstName.value, lastName.value] = newValue.split(' ')
+  }
+})
+
+fullName.value = 'Jane Smith' // 会调用setter
+console.log(firstName.value) // 'Jane'
+console.log(lastName.value)  // 'Smith'
+```
+:::
+
+::: details **Vue3 computed与Vue2的主要区别：**
+
+| 特性 | Vue2 | Vue3 |
+|-----|------|------|
+| 实现机制 | Watcher类 | ReactiveEffect类 |
+| 依赖收集 | Object.defineProperty | Proxy |
+| 缓存标识 | dirty属性 | _dirty属性 |
+| 调度器 | queueWatcher | scheduler函数 |
+| 类型安全 | 弱类型 | 强类型支持 |
+| 独立使用 | 依赖Vue实例 | 可独立使用 |
+
+**核心优势：**
+
+1. **更好的性能**：基于Proxy的依赖收集更精确
+2. **类型安全**：完整的TypeScript支持  
+3. **组合式API**：可以在setup中灵活使用
+4. **独立性**：不依赖组件实例，可单独使用
+5. **调试友好**：支持onTrack和onTrigger调试钩子
+
 
 ::: details **watch API：**
 
@@ -5346,6 +5523,336 @@ function doWatch(source, cb, { immediate, deep, flush, onTrack, onTrigger }) {
     effect.stop()
   }
 }
+```
+:::
+
+::: details **watchEffect API 核心原理：**
+
+watchEffect 是 Vue3 中最简洁的响应式监听API，它会立即执行传入的函数，并自动收集函数内部访问的响应式数据作为依赖。
+
+**核心实现：**
+
+```js
+// packages/runtime-core/src/apiWatch.ts
+export function watchEffect(
+  effect: WatchEffect,
+  options?: WatchOptionsBase
+): WatchStopHandle {
+  return doWatch(effect, null, options)
+}
+
+export function watchPostEffect(
+  effect: WatchEffect,
+  options?: DebuggerOptions
+) {
+  return doWatch(
+    effect,
+    null,
+    (__DEV__
+      ? extend({}, options as any, { flush: 'post' })
+      : { flush: 'post' }) as WatchOptionsBase
+  )
+}
+
+export function watchSyncEffect(
+  effect: WatchEffect,
+  options?: DebuggerOptions
+) {
+  return doWatch(
+    effect,
+    null,
+    (__DEV__
+      ? extend({}, options as any, { flush: 'sync' })
+      : { flush: 'sync' }) as WatchOptionsBase
+  )
+}
+
+// watchEffect的核心实现通过doWatch函数
+function doWatch(
+  source: WatchSource | WatchSource[] | WatchEffect | object,
+  cb: WatchCallback | null,
+  { immediate, deep, flush, onTrack, onTrigger }: WatchOptions = EMPTY_OBJ
+): WatchStopHandle {
+  let getter: () => any
+  let forceTrigger = false
+  let isMultiSource = false
+
+  // 处理watchEffect的情况（cb为null）
+  if (isFunction(source)) {
+    if (cb) {
+      // watch(fn, callback) 的情况
+      getter = () => source()
+    } else {
+      // watchEffect(fn) 的情况
+      getter = () => {
+        if (instance && instance.isUnmounted) {
+          return
+        }
+        // 清理上一次的副作用
+        if (cleanup) {
+          cleanup()
+        }
+        // 执行用户的effect函数，自动收集依赖
+        return callWithAsyncErrorHandling(
+          source,
+          instance,
+          ErrorCodes.WATCH_CALLBACK,
+          [onCleanup]
+        )
+      }
+    }
+  }
+
+  // 深度监听处理
+  if (cb && deep) {
+    const baseGetter = getter
+    getter = () => traverse(baseGetter())
+  }
+
+  let cleanup: () => void
+  let onCleanup: OnCleanup = (fn: () => void) => {
+    cleanup = effect.onStop = () => {
+      callWithErrorHandling(fn, instance, ErrorCodes.WATCH_CLEANUP)
+    }
+  }
+
+  let oldValue = isMultiSource ? new Array((source as []).length).fill(INITIAL_WATCHER_VALUE) : INITIAL_WATCHER_VALUE
+  
+  // 调度器：决定何时执行副作用
+  const job: SchedulerJob = () => {
+    if (!effect.active) {
+      return
+    }
+    
+    if (cb) {
+      // watch的情况：比较新旧值，有变化才执行回调
+      const newValue = effect.run()
+      if (
+        deep ||
+        forceTrigger ||
+        (isMultiSource
+          ? (newValue as any[]).some((v, i) => hasChanged(v, (oldValue as any[])[i]))
+          : hasChanged(newValue, oldValue)) ||
+        (hasShallow && newValue && newValue.some(v => v.shallowChanged))
+      ) {
+        // 清理副作用
+        if (cleanup) {
+          cleanup()
+        }
+        callWithAsyncErrorHandling(cb, instance, ErrorCodes.WATCH_CALLBACK, [
+          newValue,
+          // 首次执行时oldValue为INITIAL_WATCHER_VALUE
+          oldValue === INITIAL_WATCHER_VALUE
+            ? undefined
+            : isMultiSource && oldValue[0] === INITIAL_WATCHER_VALUE
+            ? []
+            : oldValue,
+          onCleanup
+        ])
+        oldValue = newValue
+      }
+    } else {
+      // watchEffect的情况：直接执行getter
+      effect.run()
+    }
+  }
+
+  // 控制执行时机
+  let scheduler: EffectScheduler
+  if (flush === 'sync') {
+    scheduler = job as any // 同步执行
+  } else if (flush === 'post') {
+    scheduler = () => queuePostRenderEffect(job, instance && instance.suspense) // DOM更新后执行
+  } else {
+    // 默认'pre'：DOM更新前执行
+    job.pre = true
+    if (instance) job.id = instance.uid
+    scheduler = () => queueJob(job)
+  }
+
+  // 创建响应式副作用
+  const effect = new ReactiveEffect(getter, scheduler)
+
+  // 开发环境调试支持
+  if (__DEV__) {
+    effect.onTrack = onTrack
+    effect.onTrigger = onTrigger
+  }
+
+  // 初始执行
+  if (cb) {
+    if (immediate) {
+      job()
+    } else {
+      oldValue = effect.run()
+    }
+  } else if (flush === 'post') {
+    queuePostRenderEffect(
+      effect.run.bind(effect),
+      instance && instance.suspense
+    )
+  } else {
+    effect.run() // watchEffect立即执行
+  }
+
+  // 返回停止监听的函数
+  return () => {
+    effect.stop()
+    if (instance && instance.scope) {
+      remove(instance.scope.effects!, effect)
+    }
+  }
+}
+```
+:::
+
+::: details **watchEffect 核心特性分析：**
+
+**1. 立即执行和自动依赖收集**
+```js
+import { ref, watchEffect } from 'vue'
+
+const count = ref(0)
+const name = ref('vue')
+
+// 立即执行，自动收集count和name作为依赖
+const stop = watchEffect(() => {
+  console.log(`count: ${count.value}, name: ${name.value}`)
+})
+// 立即输出: count: 0, name: vue
+
+// 任一依赖变化都会重新执行
+count.value++ // 输出: count: 1, name: vue
+name.value = 'react' // 输出: count: 1, name: react
+```
+
+**2. 副作用清理机制**
+```js
+watchEffect((onCleanup) => {
+  const timer = setTimeout(() => {
+    console.log('定时器执行')
+  }, 1000)
+
+  // 注册清理函数
+  onCleanup(() => {
+    clearTimeout(timer)
+    console.log('清理定时器')
+  })
+})
+
+// 当watchEffect重新执行或组件卸载时，会先执行清理函数
+```
+
+**3. 执行时机控制**
+```js
+// 默认：DOM更新前执行（pre）
+watchEffect(() => {
+  console.log('DOM更新前')
+})
+
+// DOM更新后执行
+watchPostEffect(() => {
+  console.log('DOM更新后')
+})
+
+// 同步执行
+watchSyncEffect(() => {
+  console.log('同步执行')
+})
+```
+
+**4. 条件性依赖收集**
+```js
+const showDetails = ref(false)
+const userInfo = ref({ name: 'John', age: 25 })
+
+watchEffect(() => {
+  console.log('用户名:', userInfo.value.name)
+  
+  // 只有showDetails为true时，才会收集age作为依赖
+  if (showDetails.value) {
+    console.log('年龄:', userInfo.value.age)
+  }
+})
+
+// 修改age不会触发重新执行（因为showDetails为false）
+userInfo.value.age = 30 // 不会触发
+
+// 开启详情显示后，age变化也会触发
+showDetails.value = true // 触发执行
+userInfo.value.age = 35 // 现在会触发执行
+```
+:::
+
+::: details **watchEffect vs watch 对比分析：**
+
+| 特性 | watchEffect | watch |
+|-----|-------------|-------|
+| **执行时机** | 立即执行 | 可选择立即执行 |
+| **依赖收集** | 自动收集 | 手动指定数据源 |
+| **回调参数** | 只有onCleanup | newValue, oldValue, onCleanup |
+| **使用场景** | 副作用逻辑 | 数据变化响应 |
+| **代码简洁性** | 简洁直观 | 需要指定监听目标 |
+
+**使用场景对比：**
+
+```js
+// ❌ 使用watch处理副作用（冗余）
+const count = ref(0)
+const doubled = ref(0)
+
+watch(count, (newVal) => {
+  doubled.value = newVal * 2
+}, { immediate: true })
+
+// ✅ 使用watchEffect处理副作用（推荐）
+watchEffect(() => {
+  doubled.value = count.value * 2
+})
+
+// ✅ 使用watch处理特定数据变化（推荐）
+watch(count, (newVal, oldVal) => {
+  console.log(`count从${oldVal}变为${newVal}`)
+})
+
+// ❌ 使用watchEffect处理特定数据变化（无法获取旧值）
+watchEffect(() => {
+  console.log(`当前count: ${count.value}`) // 无法获取旧值
+})
+```
+
+**性能对比：**
+
+1. **watchEffect优势**：
+   - 代码更简洁，减少心智负担
+   - 自动依赖收集，避免手动维护依赖列表
+   - 适合处理复杂的副作用逻辑
+
+2. **watch优势**：
+   - 可以获取新旧值进行对比
+   - 可以精确控制监听的数据源
+   - 避免不必要的依赖收集
+
+**最佳实践：**
+
+```js
+// ✅ 副作用同步：使用watchEffect
+watchEffect(() => {
+  document.title = `${route.meta.title} - ${count.value}`
+})
+
+// ✅ 数据变化处理：使用watch  
+watch(userId, async (newId) => {
+  const user = await fetchUser(newId)
+  userInfo.value = user
+})
+
+// ✅ 复杂条件依赖：使用watchEffect
+watchEffect(() => {
+  if (isLoggedIn.value && hasPermission.value) {
+    fetchSecretData()
+  }
+})
 ```
 :::
 
@@ -5425,46 +5932,27 @@ export class ReactiveEffect<T = any> {
 ::: details **依赖收集 track 函数：**
 
 ```js
-// packages/reactivity/src/effect.ts
-export function track(target: object, type: TrackOpTypes, key: unknown) {
-  if (shouldTrack && activeEffect) {
-    // 获取或创建 target 对应的 depsMap
+// packages/reactivity/src/dep.ts
+export function track(target: object, type: TrackOpTypes, key: unknown): void {
+  if (shouldTrack && activeSub) {
     let depsMap = targetMap.get(target)
     if (!depsMap) {
       targetMap.set(target, (depsMap = new Map()))
     }
-    
-    // 获取或创建 key 对应的 dep 集合
     let dep = depsMap.get(key)
     if (!dep) {
-      depsMap.set(key, (dep = createDep()))
+      depsMap.set(key, (dep = new Dep()))
+      dep.map = depsMap
+      dep.key = key
     }
-    
-    // 建立双向依赖关系
-    trackEffects(dep, debuggerEventExtraInfo ? { effect: activeEffect, target, type, key } : void 0)
-  }
-}
-
-export function trackEffects(
-  dep: Dep,
-  debuggerEventExtraInfo?: DebuggerEventExtraInfo
-) {
-  let shouldTrack = false
-  
-  if (effectTrackDepth <= maxMarkerBits) {
-    if (!newTracked(dep)) {
-      dep.n |= trackOpBit // 标记为新依赖
-      shouldTrack = !wasTracked(dep)
-    }
-  } else {
-    shouldTrack = !dep.has(activeEffect!)
-  }
-  
-  if (shouldTrack) {
-    dep.add(activeEffect!) // 将当前 effect 添加到依赖集合
-    activeEffect!.deps.push(dep) // 将依赖集合添加到 effect
-    if (__DEV__ && activeEffect!.onTrack) {
-      activeEffect!.onTrack({ effect: activeEffect!, ...debuggerEventExtraInfo! })
+    if (__DEV__) {
+      dep.track({
+        target,
+        type,
+        key,
+      })
+    } else {
+      dep.track()
     }
   }
 }
@@ -5474,129 +5962,104 @@ export function trackEffects(
 ::: details **触发更新 trigger 函数：**
 
 ```js
-// packages/reactivity/src/effect.ts
+// packages/reactivity/src/dep.ts
 export function trigger(
   target: object,
   type: TriggerOpTypes,
   key?: unknown,
   newValue?: unknown,
   oldValue?: unknown,
-  oldTarget?: Map<unknown, unknown> | Set<unknown>
-) {
+  oldTarget?: Map<unknown, unknown> | Set<unknown>,
+): void {
   const depsMap = targetMap.get(target)
   if (!depsMap) {
-    return // 没有被追踪过
+    // never been tracked
+    globalVersion++
+    return
   }
-  
-  let deps: (Dep | undefined)[] = []
-  
-  // 处理不同类型的操作
-  if (type === TriggerOpTypes.CLEAR) {
-    // 清空操作，触发所有依赖
-    deps = [...depsMap.values()]
-  } else if (key === 'length' && isArray(target)) {
-    // 数组长度变化的特殊处理
-    const newLength = Number(newValue)
-    depsMap.forEach((dep, key) => {
-      if (key === 'length' || key >= newLength) {
-        deps.push(dep)
-      }
-    })
-  } else {
-    // 处理具体key的变化
-    if (key !== void 0) {
-      deps.push(depsMap.get(key))
-    }
-    
-    // 处理新增/删除操作
-    switch (type) {
-      case TriggerOpTypes.ADD:
-        if (!isArray(target)) {
-          deps.push(depsMap.get(ITERATE_KEY))
-          if (isMap(target)) {
-            deps.push(depsMap.get(MAP_KEY_ITERATE_KEY))
-          }
-        } else if (isIntegerKey(key)) {
-          deps.push(depsMap.get('length'))
-        }
-        break
-      case TriggerOpTypes.DELETE:
-        if (!isArray(target)) {
-          deps.push(depsMap.get(ITERATE_KEY))
-          if (isMap(target)) {
-            deps.push(depsMap.get(MAP_KEY_ITERATE_KEY))
-          }
-        }
-        break
-      case TriggerOpTypes.SET:
-        if (isMap(target)) {
-          deps.push(depsMap.get(ITERATE_KEY))
-        }
-        break
-    }
-  }
-  
-  // 触发所有相关的 effect
-  const eventInfo = __DEV__ ? { target, type, key, newValue, oldValue, oldTarget } : undefined
-  
-  if (deps.length === 1) {
-    if (deps[0]) {
+
+  const run = (dep: Dep | undefined) => {
+    if (dep) {
       if (__DEV__) {
-        triggerEffects(deps[0], eventInfo)
+        dep.trigger({
+          target,
+          type,
+          key,
+          newValue,
+          oldValue,
+          oldTarget,
+        })
       } else {
-        triggerEffects(deps[0])
+        dep.trigger()
       }
     }
+  }
+
+  startBatch()
+
+  if (type === TriggerOpTypes.CLEAR) {
+    // collection being cleared
+    // trigger all effects for target
+    depsMap.forEach(run)
   } else {
-    const effects: ReactiveEffect[] = []
-    for (const dep of deps) {
-      if (dep) {
-        effects.push(...dep)
+    const targetIsArray = isArray(target)
+    const isArrayIndex = targetIsArray && isIntegerKey(key)
+
+    if (targetIsArray && key === 'length') {
+      const newLength = Number(newValue)
+      depsMap.forEach((dep, key) => {
+        if (
+          key === 'length' ||
+          key === ARRAY_ITERATE_KEY ||
+          (!isSymbol(key) && key >= newLength)
+        ) {
+          run(dep)
+        }
+      })
+    } else {
+      // schedule runs for SET | ADD | DELETE
+      if (key !== void 0 || depsMap.has(void 0)) {
+        run(depsMap.get(key))
+      }
+
+      // schedule ARRAY_ITERATE for any numeric key change (length is handled above)
+      if (isArrayIndex) {
+        run(depsMap.get(ARRAY_ITERATE_KEY))
+      }
+
+      // also run for iteration key on ADD | DELETE | Map.SET
+      switch (type) {
+        case TriggerOpTypes.ADD:
+          if (!targetIsArray) {
+            run(depsMap.get(ITERATE_KEY))
+            if (isMap(target)) {
+              run(depsMap.get(MAP_KEY_ITERATE_KEY))
+            }
+          } else if (isArrayIndex) {
+            // new index added to array -> length changes
+            run(depsMap.get('length'))
+          }
+          break
+        case TriggerOpTypes.DELETE:
+          if (!targetIsArray) {
+            run(depsMap.get(ITERATE_KEY))
+            if (isMap(target)) {
+              run(depsMap.get(MAP_KEY_ITERATE_KEY))
+            }
+          }
+          break
+        case TriggerOpTypes.SET:
+          if (isMap(target)) {
+            run(depsMap.get(ITERATE_KEY))
+          }
+          break
       }
     }
-    if (__DEV__) {
-      triggerEffects(createDep(effects), eventInfo)
-    } else {
-      triggerEffects(createDep(effects))
-    }
   }
+
+  endBatch()
 }
 
-export function triggerEffects(
-  dep: Dep | ReactiveEffect[],
-  debuggerEventExtraInfo?: DebuggerEventExtraInfo
-) {
-  const effects = isArray(dep) ? dep : [...dep]
-  
-  // 先触发 computed effects，再触发普通 effects
-  for (const effect of effects) {
-    if (effect.computed) {
-      triggerEffect(effect, debuggerEventExtraInfo)
-    }
-  }
-  for (const effect of effects) {
-    if (!effect.computed) {
-      triggerEffect(effect, debuggerEventExtraInfo)
-    }
-  }
-}
-
-function triggerEffect(
-  effect: ReactiveEffect,
-  debuggerEventExtraInfo?: DebuggerEventExtraInfo
-) {
-  if (effect !== activeEffect || effect.allowRecurse) {
-    if (__DEV__ && effect.onTrigger) {
-      effect.onTrigger(extend({ effect }, debuggerEventExtraInfo))
-    }
-    
-    if (effect.scheduler) {
-      effect.scheduler() // 使用调度器
-    } else {
-      effect.run() // 直接执行
-    }
-  }
-}
 ```
 :::
 

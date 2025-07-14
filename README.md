@@ -7,10 +7,15 @@
 ### Vue 响应式系统原理深度解析 (2024-12)
 在基础知识文档中增加了 Vue 响应式系统的完整实现原理，包含：
 
-**computed 和 watch 原理**
-- computed 缓存机制的源码实现
-- watch 监听器的依赖收集原理  
-- Vue2 与 Vue3 在实现上的差异对比
+**computed、watch 和 watchEffect 原理**
+- Vue2 computed 的 Watcher 机制和缓存实现
+- Vue3 computed 的 ReactiveEffect 机制完整源码
+- ComputedRefImpl 类的详细实现和类型定义  
+- 懒计算、缓存机制、依赖收集的完整示例
+- watch 监听器的依赖收集原理
+- watchEffect 自动依赖收集和立即执行机制
+- watchEffect vs watch 的详细对比分析和最佳实践
+- Vue2 与 Vue3 在实现上的深度对比分析
 
 **Effect 数据劫持核心机制**
 - ReactiveEffect 类的完整实现
