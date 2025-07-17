@@ -6274,11 +6274,18 @@ function createSetter(shallow = false) {
 
 ### 为什么 v-for 和 v-if 不建议用在一起
 
-1. 当 v-for 和 v-if 处于同一个节点时，v-for 的优先级比 v-if 更高，这意味着 v-if 将分别重复运行于每个 v-for 循环中。如果要遍历的数组很大，而真正要展示的数据很少时，这将造成很大的性能浪费（Vue2.x）
+**Vue2** : 当 v-for 和 v-if 处于同一个节点时，v-for 的优先级比 v-if 更高，这意味着 v-if 将分别重复运行于每个 v-for 循环中，导致所有数据的虚拟DOM都会被创建然后再经过判断进行渲染
 
-2. 这种场景建议使用 computed，先对数据进行过滤
+**Vue3** : `v-if` 总是优先于 `v-for` 生效，`v-if`无法访问`v-for`作用域中定义的对象
 
-注意：3.x 版本中 `v-if` 总是优先于 `v-for` 生效。由于语法上存在歧义，建议避免在同一元素上同时使用两者。比起在模板层面管理相关逻辑，更好的办法是通过创建计算属性筛选出列表，并以此创建可见元素。
+:::info **解决方法**
+Vue2: 
+  > 使用`computed`对数据进行筛选
+
+Vue3:
+  > 1. 在`template`中将`v-for`和`v-if`分离
+  > 2. 使用`computed`对数据进行筛选
+:::
 
 解惑传送门 ☞ [# v-if 与 v-for 的优先级对比非兼容](https://link.juejin.cn/?target=https%3A%2F%2Fv3.cn.vuejs.org%2Fguide%2Fmigration%2Fv-if-v-for.html%23%25E6%25A6%2582%25E8%25A7%2588)
 
@@ -6286,7 +6293,7 @@ function createSetter(shallow = false) {
 
 key 的作用是为了在 diff 算法执行时更快的找到对应的节点，`提高 diff 速度，更高效的更新虚拟 DOM`;
 
-* vue 和 react 都是采用 diff 算法来对比新旧虚拟节点，从而更新节点。在 vue 的 diff 函数中，会根据新节点的 key 去对比旧节点数组中的 key，从而找到相应旧节点。如果没找到就认为是一个新增节点。而如果没有 key，那么就会采用遍历查找的方式去找到对应的旧节点。一种一个 map 映射，另一种是遍历查找。相比而言。map 映射的速度更快。
+* vue 采用 diff 算法来对比新旧虚拟节点，从而更新节点。在 vue 的 diff 函数中，会根据新节点的 key 去对比旧节点数组中的 key，从而找到相应旧节点。如果没找到就认为是一个新增节点。而如果没有 key，那么就会采用遍历查找的方式去找到对应的旧节点。一种一个 map 映射，另一种是遍历查找。相比而言。map 映射的速度更快。
 
 为了在数据变化时强制更新组件，以避免"就地复用"带来的副作用。
 
@@ -6296,7 +6303,7 @@ key 的作用是为了在 diff 算法执行时更快的找到对应的节点，`
 
 vue2 的 diff 算法是双端比较，从新旧两端开始比较，如果两端相同，则继续比较，如果两端不同，则比较中间的节点，如果中间的节点相同，则继续比较，如果中间的节点不同，则比较两端的节点，直到找到相同的节点为止。
 
-vue3 的 diff 算法是快速 diff 算法，是基于 vue2 的 diff 算法改进的，主要优化了以下几点：
+vue3 的 diff 算法是快速 diff 算法，是基于 vue2 的 diff 算法改进的 *(同时也在使用双端比较算法)*，主要优化了以下几点：
 
 #### 1. 静态提升和 PatchFlag 优化
 
@@ -6488,19 +6495,11 @@ function patchKeyedChildren(
 3. **最长递增子序列**：减少DOM移动操作，提升性能
 4. **头尾双端预处理**：快速处理常见的列表操作场景
 
-**Feature branches**：这种分支和咱们程序员平常开发最为密切，称做功能分支。必须从 develop 分支建立，完成后合并回 develop 分支。
-
-**Release branches**：这个分支用来分布新版本。从 develop 分支建立，完成后合并回 develop 与 master 分支。这个分支上能够作一些很是小的 bug 修复，固然，你也能够禁止在这个分支作任何 bug 的修复工做，而只作版本发布的相关操做，例如设置版本号等操做，那样的话那些发现的小 bug 就必须放到下一个版本修复了。若是在这个分支上发现了大 bug，那么也绝对不能在这个分支上改，须要 Featrue 分支上改，走正常的流程。
-
-**Hotfix branches**：这个分支主要为修复线上特别紧急的 bug 准备的。必须从 master 分支建立，完成后合并回 develop 与 master 分支。这个分支主要是解决线上版本的紧急 bug 修复的，例如忽然版本 V0.1 上有一个致命 bug，必须修复。那么咱们就能够从 master 分支上发布这个版本那个时间点 例如 tag v0.1（通常代码发布后会及时在 master 上打 tag），来建立一个 hotfix-v0.1.1 的分支，而后在这个分支上改 bug，而后发布新的版本。最后将代码合并回 develop 与 master 分支。
-
-[更多请参考](https://link.juejin.cn/?target=https%3A%2F%2Fnvie.com%2Fposts%2Fa-successful-git-branching-model%2F)
+### Vue的组件通信
 
 * `Event Bus` 实现跨组件通信 `Vue.prototype.$bus = new Vue()` 自定义事件
 
-vuex 跨级组件通信
-
-* Vuex、`$attrs、$listeners` `Provide、inject`
+* `Vuex`、`pinia`、`$attrs、$listeners` `Provide、inject`
 
 ### nextTick 的实现
 
@@ -6538,25 +6537,46 @@ mixin 并不是完美的解决方案，会有一些问题
 
 vue3 提出的 Composition API 旨在解决这些问题【追求完美是要消耗一定的成本的，如开发成本】
 
-场景：PC 端新闻列表和详情页一样的右侧栏目，可以使用 mixin 进行混合
+:::info **场景**
+PC 端新闻列表和详情页一样的右侧栏目，可以使用 mixin 进行混合
+:::
 
-劣势：1.变量来源不明确，不利于阅读
+:::danger **劣势**
+1.变量来源不明确，不利于阅读
 
 2.多 mixin 可能会造成命名冲突 3.mixin 和组件可能出现多对多的关系，使得项目复杂度变高
+:::
 
 ### Vuex 的理解及使用场景
 
 Vuex 是一个专为 Vue 应用程序开发的状态管理模式。每一个 Vuex 应用的核心就是 store（仓库）。
 
-1. Vuex 的状态存储是响应式的；当 Vue 组件从 store 中读取状态的时候，
+1. Vuex 的状态存储是响应式的；当 Vue 组件从 store 中读取状态的时候，若 store 中的状态发生变化，那么相应的组件也会相应地得到高效更新
 
-若 store 中的状态发生变化，那么相应的组件也会相应地得到高效更新 2. 改变 store 中的状态的唯一途径就是显式地提交 (commit) mutation， 这样使得我们可以方便地跟踪每一个状态的变化 Vuex 主要包括以下几个核心模块：
+2. 改变 store 中的状态的唯一途径就是显式地提交 (commit) mutation， 这样使得我们可以方便地跟踪每一个状态的变化 Vuex 主要包括以下几个核心模块：
+
+#### Vuex的属性
 
 1. State：定义了应用的状态数据
 
-2. Getter：在 store 中定义"getter"（可以认为是 store 的计算属性），
+2. Getter：在 store 中定义"getter"（可以认为是 store 的计算属性），就像计算属性一样，getter 的返回值会根据它的依赖被缓存起来， 且只有当它的依赖值发生了改变才会被重新计算 
 
-就像计算属性一样，getter 的返回值会根据它的依赖被缓存起来， 且只有当它的依赖值发生了改变才会被重新计算 3. Mutation：是唯一更改 store 中状态的方法，且必须是同步函数 4. Action：用于提交 mutation，而不是直接变更状态，可以包含任意异步操作 5. Module：允许将单一的 Store 拆分为多个 store 且同时保存在单一的状态树中
+3. Mutation：是唯一更改 store 中状态的方法，且必须是同步函数
+
+4. Action：用于提交 mutation，而不是直接变更状态，可以包含任意异步操作
+
+5. Module：允许将单一的 Store 拆分为多个 store 且同时保存在单一的状态树中
+
+### pinia
+
+#### pinia的使用方式
+
+> 1. 组合式使用
+> 2. 选项式使用: 使用`State`，`Getter`，`Actions`进行数据存储和操作
+
+#### pinia在Vue组件实例化时做了什么
+
+> 使用`provide`确保能正确使用pinia实例
 
 ## Vite
 
