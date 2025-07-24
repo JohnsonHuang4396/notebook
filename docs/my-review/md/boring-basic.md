@@ -1815,7 +1815,7 @@ graph TD
 ##### 新增表单控件
 
 ::: info
-== 输入类型
+**输入类型**
 ```html
 <!-- 新的 input 类型 -->
 <input type="email" placeholder="请输入邮箱">
@@ -1829,7 +1829,7 @@ graph TD
 <input type="search" placeholder="搜索...">
 ```
 
-== 表单元素
+**表单元素**
 ```html
 <!-- 数据列表 -->
 <input list="browsers">
@@ -2755,19 +2755,6 @@ input, textarea, select {
 }
 ```
 
-### CSS 盒子模型
-
-CSS 盒子模型本质上是一个盒子，它包括：边距，边框，填充和实际内容。CSS 中的盒子模型包括 IE 盒子模型和标准的 W3C 盒子模型。
-
-在标准的盒子模型中，`width 指 content 部分的宽度`。
-
-在 IE 盒子模型中，`width 表示 content+padding+border 这三个部分的宽度`。
-
-故在计算盒子的宽度时存在差异：
-
-**标准盒模型：** 一个块的总宽度 = width+margin(左右)+padding(左右)+border(左右)
-
-**怪异盒模型：** 一个块的总宽度 = width+margin（左右）（既 width 已经包含了 padding 和 border 值）
 
 ### BFC（块级格式上下文）详解
 
